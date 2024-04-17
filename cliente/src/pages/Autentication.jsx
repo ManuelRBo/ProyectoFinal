@@ -2,7 +2,7 @@ import { useState } from "react";
 import BotonAutenticar from "../components/BotonAutenticar";
 import Modal from "../components/Modal";
 
-export default function Autentication() {
+export default function Authentication() {
   const [modalOpen, setModalOpen] = useState({
     'open' : false,
     'auth' : "",
