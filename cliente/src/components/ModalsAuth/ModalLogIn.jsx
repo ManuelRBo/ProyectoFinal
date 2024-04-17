@@ -1,11 +1,16 @@
 import InputForm from "./InputForm";
 import { useForm } from "react-hook-form";
 import BotonAutenticar from "../BotonAutenticar";
+import { useNavigate } from "react-router-dom";
 
 export default function ModalLogIn() {
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const navigate = useNavigate();
 
-    const handleSubmitForm = data => console.log(data);
+    const handleSubmitForm = (data)=>{
+        console.log(data);
+        navigate("/home");
+    };
 
     return (
         <form onSubmit={handleSubmit(handleSubmitForm)}>

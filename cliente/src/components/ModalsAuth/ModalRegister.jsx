@@ -1,6 +1,7 @@
 import InputForm from "./InputForm";
 import { useForm } from "react-hook-form";
 import BotonAutenticar from "../BotonAutenticar";
+import { useNavigate } from "react-router-dom";
 
 export default function ModalRegister() {
   const {
@@ -8,11 +9,15 @@ export default function ModalRegister() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const navigate = useNavigate();
 
-  const onSubmitForm = (data) => console.log(data);
+  const handleSubmitForm = (data)=>{
+    console.log(data);
+    navigate("/home");
+};
 
   return (
-    <form onSubmit={handleSubmit(onSubmitForm)}>
+    <form onSubmit={handleSubmit(handleSubmitForm)}>
       <h2 className="text-center font-bold font-inter text-4xl">Registrarse</h2>
       <div className="mt-5 flex flex-col gap-4">
         <InputForm
