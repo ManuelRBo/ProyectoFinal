@@ -10,7 +10,7 @@ function App() {
     <Suspense fallback={<h1>Loading...</h1>}>
       <Routes>
         <Route path="/" element={<Authentication />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/home/*" element={<Home />} />
         <Route path="*" element={<h1>Page Not Found</h1>} />
       </Routes>
     </Suspense>
