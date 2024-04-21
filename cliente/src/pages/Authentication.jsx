@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BotonAutenticar from "../components/BotonAutenticar";
 import Modal from "../components/Modal";
 
@@ -15,6 +15,13 @@ export default function Authentication() {
   function modalClose(){
     setModalOpen({open: false, auth: ""});
   }
+
+  useEffect(() => {
+    console.log('Se montó el componente');
+  fetch('http://localhost:3000/api/saludo')
+    .then(response => response.json())
+    .then(data => console.log(data));
+  }, []);
 
   return (
     <main className="flex flex-col gap-20 lg:flex-row min-h-screen lg:gap-0 w-full">
