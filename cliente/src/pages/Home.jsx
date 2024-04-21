@@ -14,6 +14,7 @@ import MenuOption from "../components/HomeComponents/MenuOption";
 import Messages from "../components/HomeComponents/Messages";
 import PrimaryPage from "../components/HomePages/PrimaryPage";
 import Chats from "../components/HomePages/Chats";
+import Friends from "../components/HomePages/Friends";
 
 export default function Home() {
   const [menuExpanded, setMenuExpanded] = useState(true);
@@ -80,7 +81,8 @@ export default function Home() {
             />
             <MenuOption
               Icon={UsersIcon}
-              text={menuExpanded ? "Usuarios" : ""}
+              text={menuExpanded ? "Amigos" : ""}
+              to={"/home/friends"}
             />
           </div>
           <hr className={`border-t border-gray-300 w-full`} />
@@ -138,7 +140,7 @@ export default function Home() {
         <Routes>
           <Route path="/" element={<PrimaryPage />} />
           <Route path="/chat" element={<Chats />} />
-          <Route path="/friends" element={<h1>Users</h1>} />
+          <Route path="/friends" element={<Friends />} />
         </Routes>
       </main>
 
