@@ -5,7 +5,7 @@ export default function Messages({ img = 'https://randomuser.me/api/portraits/me
                 src={img}
                 alt="profile"
                 className="rounded-full"
-                width="40px"
+                width="50px"
             />
             <div className="overflow-hidden">
                 {name ? <h3 className="font-inter font-bold">{name}</h3> : ""}

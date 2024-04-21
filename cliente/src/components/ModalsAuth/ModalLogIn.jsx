@@ -8,7 +8,6 @@ export default function ModalLogIn() {
     const navigate = useNavigate();
 
     const handleSubmitForm = (data)=>{
-        console.log(data);
         navigate("/home");
     };
 
