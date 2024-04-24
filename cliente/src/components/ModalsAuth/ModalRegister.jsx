@@ -2,6 +2,7 @@ import InputForm from "./InputForm";
 import { useForm } from "react-hook-form";
 import BotonAutenticar from "../BotonAutenticar";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function ModalRegister() {
   const {
@@ -12,8 +13,10 @@ export default function ModalRegister() {
   const navigate = useNavigate();
 
   const handleSubmitForm = (data)=>{
-    console.log(data);
-    navigate("/home");
+    axios.post("http://localhost:3000/auth/register", data)
+    .then((res)=>{
+      console.log(res.data)
+    })
 };
 
   return (

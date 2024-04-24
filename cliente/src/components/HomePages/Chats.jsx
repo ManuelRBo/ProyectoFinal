@@ -8,8 +8,8 @@ export default function Chats() {
   const [sendHover, setSendHover] = useState(false);
 
   return (
-    <div className="flex flex-col gap-5 justify-between pb-4 h-full">
-      <div className="flex items-center gap-5 border-b-2 border-gray-200 pb-3">
+    <div className="flex flex-col gap-5 justify-between pb-4 h-full max-md:h-[calc(100%-80px)]">
+      <div className="flex items-center max-md:justify-center gap-5 border-b-2 border-gray-200 pb-3 ml-5">
         <Icon icon="vscode-icons:file-type-js-official" width={"55px"} />
         <h2 className="text-4xl font-bold font-inter">JS</h2>
       </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route} from "react-router-dom";
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
@@ -52,14 +52,18 @@ export default function Home() {
             menuExpanded ? "max-w-44 w-4/5" : "w-12"
           }`}
         >
-          <div className="flex items-center gap-5 pt-7 p-2">
+          
+            {window.innerWidth > 900 ? 
+            <div className="flex items-center gap-3 pt-7 p-2">
             <Bars3Icon
               width="30px"
               className="cursor-pointer"
               onClick={handleMenu}
             />
-            {menuExpanded && <h3>Logo</h3>}
-          </div>
+              <div className="absolute left-14 w-28 lg:left-20">
+                <img src="/Logo.svg" alt="" width={"100px"}/>
+              </div>
+              </div> : <div className="w-16 pt-7 "><img src="/Logo.svg" alt="" width={"60px"}/></div>}
           <hr className={`border-t border-gray-300 w-full`} />
           <div
             className={`w-full ${
@@ -136,7 +140,7 @@ export default function Home() {
         </div>
       </aside>
 
-      <main className="w-4/5 mt-10 h-[calc(100vh-40px)]">
+      <main className="w-4/5 mt-6 h-[calc(100vh-40px)]">
         <Routes>
           <Route path="/" element={<PrimaryPage />} />
           <Route path="/chat" element={<Chats />} />
