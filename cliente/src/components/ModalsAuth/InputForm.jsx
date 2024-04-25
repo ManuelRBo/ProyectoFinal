@@ -1,7 +1,7 @@
 export default function InputForm({ label, type, placeholder, register, error }) {
   
     return (
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col">
         <label htmlFor={label.toLowerCase()} className="text-base font-inter">
           {label}
         </label>

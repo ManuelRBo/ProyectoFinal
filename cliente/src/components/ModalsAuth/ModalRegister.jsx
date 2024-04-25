@@ -22,7 +22,7 @@ export default function ModalRegister() {
   return (
     <form onSubmit={handleSubmit(handleSubmitForm)}>
       <h2 className="text-center font-bold font-inter text-4xl">Registrarse</h2>
-      <div className="mt-5 flex flex-col gap-4">
+      <div className="mt-2 flex flex-col gap-3">
         <InputForm
           label="Nombre"
           type="text"
@@ -88,27 +88,29 @@ export default function ModalRegister() {
           error={errors.password}
         />
 
-        <label htmlFor="experience" className="font-inter">
-          Años de Experiencia
-        </label>
-        <div className="flex flex-col gap-2">
-            <select
-              id="experience"
-              className={`w-full border-2 p-1 ${errors.experience ? "border-red-500" : "border-[#004280]"}`}
-              {...register("experience", { required: "Este campo es obligatorio" })}
-            >
-              <option value="">Seleccione los años de experiencia</option>
-              <option value="none">Sin Experiencia</option>
-              <option value="junior">{"<"} 2 años - Junior</option>
-              <option value="semi-senior">2 - 5 años - Semi Senior</option>
-              <option value="senior">5 - 10 años - Senior</option>
-              <option value="expert">{">"} 10 años - Experto</option>
-            </select>
-            {errors.experience && (
-              <p className="text-red-500 text-xs font-inter">
-                {errors.experience.message}
-              </p>
-            )}
+        <div className="flex flex-col">
+          <label htmlFor="experience" className="font-inter">
+            Años de Experiencia
+          </label>
+          <div className="flex flex-col gap-2">
+              <select
+                id="experience"
+                className={`w-full border-2 p-1 ${errors.experience ? "border-red-500" : "border-[#004280]"}`}
+                {...register("experience", { required: "Este campo es obligatorio" })}
+              >
+                <option value="">Seleccione los años de experiencia</option>
+                <option value="none">Sin Experiencia</option>
+                <option value="junior">{"<"} 2 años - Junior</option>
+                <option value="semi-senior">2 - 5 años - Semi Senior</option>
+                <option value="senior">5 - 10 años - Senior</option>
+                <option value="expert">{">"} 10 años - Experto</option>
+              </select>
+              {errors.experience && (
+                <p className="text-red-500 text-xs font-inter">
+                  {errors.experience.message}
+                </p>
+              )}
+          </div>
         </div>
       </div>
       <BotonAutenticar texto="Registrarse" className="mt-5" />
