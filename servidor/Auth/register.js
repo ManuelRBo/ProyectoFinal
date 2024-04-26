@@ -1,3 +1,3 @@
-export default function register(req, res) {
+export default async function register(req, res) {
     
 }

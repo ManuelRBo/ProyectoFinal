@@ -2,6 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import register from './Auth/register.js';
+import db from './database.js';
 
 const app = express();
 const PORT = 3000;
@@ -16,6 +17,7 @@ app.use(cors({
 
 // Middleware para parsear JSON en las solicitudes entrantes
 app.use(express.json());
+
 
 app.post('/auth/register', register);
 
