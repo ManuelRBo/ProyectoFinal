@@ -11,6 +11,7 @@ const userSchema = new Schema({
     exp: { type: String, required: true },
     img: { type: String, required: false, default: null},
     friends: [{ type: Types.ObjectId, ref: 'User' }],
+    token_email: { type: String, required: false, default: null},
 });
 
 const User = model("User", userSchema);

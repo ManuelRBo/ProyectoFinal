@@ -25,9 +25,11 @@ export default function Modal({ auth, onClose }) {
       <Dialog onClose={close} className={`fixed inset-0 flex items-center justify-center p-4 z-10 mx-auto max-w-xl lg:p-0 ${auth == 'register' && "py-5"}`} >
         <Dialog.Overlay className="fixed inset-0 bg-black opacity-50"/> 
         <Dialog.Panel className="relative z-20 bg-white rounded-md shadow-lg w-full mx-auto px-10 py-12">
-            {auth == 'login' ? <ModalLogIn /> : <ModalRegister />}
+            {auth == 'login' ? <ModalLogIn /> : <ModalRegister onClose={close} />}
         </Dialog.Panel>
       </Dialog>
     </Transition>
+
+    
   );
 }

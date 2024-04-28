@@ -1,10 +1,11 @@
 import InputForm from "./InputForm";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { toast, Bounce } from "react-toastify";
 import BotonAutenticar from "../BotonAutenticar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function ModalRegister() {
+export default function ModalRegister({ onClose }) {
   let {
     register,
     handleSubmit,
@@ -14,26 +15,49 @@ export default function ModalRegister() {
   const navigate = useNavigate();
 
   const handleSubmitForm = (data) => {
-    axios
-      .post("http://localhost:3000/auth/register", data)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        const serverErrors = err.response.data.errors;
-        serverErrors.forEach((error) => {
-          setError(error.path, {
-            message: error.msg,
-          });
-        });
-      });
+    toast.promise(
+      axios.post("http://localhost:3000/auth/register", data),
+      {
+        pending: "Registrando...",
+        success: {
+          render({ data }) {
+            onClose();
+            return data.data.message || "Registro exitoso!";
+          },
+          autoClose: 2000,
+        },
+        error: {
+          render({ data }) {
+            if (data.response && data.response.data && data.response.data.errors) {
+              const serverErrors = data.response.data.errors;
+              serverErrors.forEach((error) => {
+                setError(error.path, { message: error.msg }); 
+              });
+              return "Error al registrarse. Compruebe los datos ingresados.";
+            }
+            return "Error al registrarse. Intente más tarde.";
+          },
+          autoClose: 2000,
+        },
+      },
+      {
+        position: "top-right",
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
   };
+  
 
   return (
     <form onSubmit={handleSubmit(handleSubmitForm)}>
       <h2 className="text-center font-bold font-inter text-4xl">Registrarse</h2>
       <div className="mt-2 flex flex-col gap-3">
-
         <InputForm
           label="Nombre de Usuario"
           type="text"
