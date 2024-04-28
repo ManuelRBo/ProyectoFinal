@@ -1,8 +1,8 @@
 // Importa las dependencias necesarias
 import express from 'express';
 import cors from 'cors';
-import register from './Auth/register.js';
 import db from './database.js';
+import routes from './Routes/routes.js';
 
 const app = express();
 const PORT = 3000;
@@ -18,8 +18,7 @@ app.use(cors({
 // Middleware para parsear JSON en las solicitudes entrantes
 app.use(express.json());
 
-
-app.post('/auth/register', register);
+app.use(routes);
 
 // Inicia el servidor
 app.listen(PORT, () => {

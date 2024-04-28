@@ -2,13 +2,14 @@ import { Schema, model, Types } from "mongoose";
 
 
 const userSchema = new Schema({
-    user_id: { type: Types.ObjectId, ref: 'User', required: true, unique: true, index: true, },
     username: { type: String, required: true, unique: true},
     first_name: { type: String, required: true },
+    last_name: { type: String, required: true },
     password: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    exp: { type: Number, required: true },
-    img: { type: String, required: true },
+    birthdate: { type: Date, required: true },
+    exp: { type: String, required: true },
+    img: { type: String, required: false, default: null},
     friends: [{ type: Types.ObjectId, ref: 'User' }],
 });
 
