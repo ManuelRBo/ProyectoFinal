@@ -9,6 +9,7 @@ const userSchema = new Schema({
     email: { type: String, required: true, unique: true },
     exp: { type: Number, required: true },
     img: { type: String, required: true },
+    friends: [{ type: Types.ObjectId, ref: 'User' }],
 });
 
 const User = model("User", userSchema);
