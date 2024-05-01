@@ -28,7 +28,7 @@ export const registerValidator = [
   body("lastname").trim().escape().toLowerCase(),
   body("birthdate").trim().escape(),
   body("email").normalizeEmail(),
-  body("password").trim(),
+  body("password").trim().escape(),
 
   (req, res, next) => {
     const errors = validationResult(req);
