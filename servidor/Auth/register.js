@@ -1,4 +1,5 @@
 import { body, validationResult } from "express-validator";
+import bcrypt from "bcrypt";
 import User from "../models/User.js";
 
 export const registerValidator = [
@@ -40,40 +41,45 @@ export const registerValidator = [
 ];
 
 export default async function register(req, res) {
-  const { username, name, lastname, birthdate, email, password, experience } =
-    req.body;
-  const user = new User({
-    username: username,
-    first_name: name,
-    last_name: lastname,
-    password: password,
-    email: email,
-    birthdate: birthdate,
-    exp: experience,
-  });
-  console.log(user);
-  try {
-    await user.save();
-    res.status(201).json({ message: "Usuario registrado correctamente" });
-  } catch (error) {
-    if (error.code === 11000) {
-      if (error.keyValue.email) {
-        return res
-          .status(400)
-          .json({
-            errors: [
-              { path: "email", msg: "El correo electrónico ya está en uso" },
-            ],
-          });
-      } else if (error.keyValue.username) {
-        return res
-          .status(400)
-          .json({
-            errors: [
-              { path: "username", msg: "El nombre de usuario ya está en uso" },
-            ],
-          });
+  const { username, name, lastname, birthdate, email, password, experience } = req.body;
+
+  try{
+    const hasPassword = await bcrypt.hash(password, 10);
+
+    const user = new User({
+      username: username,
+      first_name: name,
+      last_name: lastname,
+      password: hasPassword,
+      email: email,
+      birthdate: birthdate,
+      exp: experience,
+    });
+    try {
+      await user.save();
+      res.status(201).json({ message: "Usuario registrado correctamente" });
+    } catch (error) {
+      if (error.code === 11000) {
+        if (error.keyValue.email) {
+          return res
+            .status(400)
+            .json({
+              errors: [
+                { path: "email", msg: "El correo electrónico ya está en uso" },
+              ],
+            });
+        } else if (error.keyValue.username) {
+          return res
+            .status(400)
+            .json({
+              errors: [
+                { path: "username", msg: "El nombre de usuario ya está en uso" },
+              ],
+            });
+        }
       }
     }
+  }catch(error){
+    console.log(error);
   }
 }
