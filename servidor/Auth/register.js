@@ -1,6 +1,8 @@
 import { body, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
+import jwt from "jsonwebtoken";
+
 
 export const registerValidator = [
   body("username")
@@ -41,9 +43,10 @@ export const registerValidator = [
 ];
 
 export default async function register(req, res) {
-  const { username, name, lastname, birthdate, email, password, experience } = req.body;
+  const { username, name, lastname, birthdate, email, password, experience } =
+    req.body;
 
-  try{
+  try {
     const hasPassword = await bcrypt.hash(password, 10);
 
     const user = new User({
@@ -57,29 +60,35 @@ export default async function register(req, res) {
     });
     try {
       await user.save();
+      const payload = {
+        id: user.id,
+        username: user.username,
+      };
+      const token = jwt.sign(payload, "prueba", { expiresIn: "1h" });
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+      });
       res.status(201).json({ message: "Usuario registrado correctamente" });
     } catch (error) {
       if (error.code === 11000) {
         if (error.keyValue.email) {
-          return res
-            .status(400)
-            .json({
-              errors: [
-                { path: "email", msg: "El correo electrónico ya está en uso" },
-              ],
-            });
+          return res.status(400).json({
+            errors: [
+              { path: "email", msg: "El correo electrónico ya está en uso" },
+            ],
+          });
         } else if (error.keyValue.username) {
-          return res
-            .status(400)
-            .json({
-              errors: [
-                { path: "username", msg: "El nombre de usuario ya está en uso" },
-              ],
-            });
+          return res.status(400).json({
+            errors: [
+              { path: "username", msg: "El nombre de usuario ya está en uso" },
+            ],
+          });
         }
       }
     }
-  }catch(error){
+  } catch (error) {
     console.log(error);
   }
 }

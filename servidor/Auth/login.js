@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import { body, validationResult } from "express-validator";
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 export const loginValidator = [
@@ -21,14 +22,19 @@ export default async function login(req, res) {
     try{
         const user = await User.findOne( {$or: [{email: user_email}, {username: user_email}]})
         if(!user){
-            return res.status(400).json({message: 'Usuario no encontrado'});
+            return res.status(400).json( {errors: [{path: 'user_email', msg: 'Usuario no encontrado'}]});
         }
-        console.log(user);
         const isMatch = await bcrypt.compare(password, user.password);
         if(!isMatch){
-            return res.status(400).json({message: 'Contraseña incorrecta'});
+            return res.status(400).json({errors: [{path: 'password', msg: 'Contraseña incorrecta'}]});
         }
-        return res.status(200).json({message: 'Usuario autenticado correctamente', user: user});
+        const payload = {
+            id: user.id,
+            username: user.username,
+        }
+        const token = jwt.sign(payload, "prueba", {expiresIn: '1h'});
+        res.cookie('token', token, {httpOnly: true, secure: true, sameSite: 'strict'});
+        return res.status(200).json({message: 'Usuario autenticado correctamente'});
     }catch(error){
         console.log(error);
     }

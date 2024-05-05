@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route} from "react-router-dom";
+import { Routes, Route  } from "react-router-dom";
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
@@ -19,7 +19,7 @@ import Friends from "../components/HomePages/Friends";
 export default function Home() {
   const [menuExpanded, setMenuExpanded] = useState(true);
   const [configOpen, setConfigOpen] = useState(false);
-
+  
   const close = () => {
     setConfigOpen(false);
   };

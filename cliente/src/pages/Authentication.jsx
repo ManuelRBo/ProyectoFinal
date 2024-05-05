@@ -3,6 +3,7 @@ import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import BotonAutenticar from "../components/BotonAutenticar";
 import Modal from "../components/Modal";
+import { set } from "react-hook-form";
 
 export default function Authentication() {
   const [modalOpen, setModalOpen] = useState({

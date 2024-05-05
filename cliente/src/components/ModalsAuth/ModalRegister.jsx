@@ -4,8 +4,9 @@ import { toast, Bounce } from "react-toastify";
 import BotonAutenticar from "../BotonAutenticar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuthStore } from "../../stores/useAuthStore";
 
-export default function ModalRegister({ onClose }) {
+export default function ModalRegister() {
   let {
     register,
     handleSubmit,
@@ -13,18 +14,20 @@ export default function ModalRegister({ onClose }) {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
+  const { login } = useAuthStore();
 
   const handleSubmitForm = (data) => {
     toast.promise(
-      axios.post("http://localhost:3000/auth/register", data),
+      axios.post("/api/auth/register", data),
       {
         pending: "Registrando...",
         success: {
           render({ data }) {
-            onClose();
+            login();
             return data.data.message || "Registro exitoso!";
           },
           autoClose: 2000,
+          onClose: () => navigate("/home"),
         },
         error: {
           render({ data }) {
