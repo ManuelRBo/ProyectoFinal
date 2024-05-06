@@ -32,8 +32,8 @@ export default async function login(req, res) {
             id: user.id,
             username: user.username,
         }
-        const token = jwt.sign(payload, "prueba", {expiresIn: '1h'});
-        res.cookie('token', token, {httpOnly: true, secure: true, sameSite: 'strict'});
+        const token = jwt.sign(payload, "prueba", {expiresIn: '1d'});
+        res.cookie('token', token, {httpOnly: true, secure: true, sameSite: 'strict', expires: new Date(Date.now() + 24 * 60 * 60 * 1000)});
         return res.status(200).json({message: 'Usuario autenticado correctamente'});
     }catch(error){
         console.log(error);

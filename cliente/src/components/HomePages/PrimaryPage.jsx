@@ -11,15 +11,14 @@ export default function PrimaryPage() {
       </p>
 
       <form className="mb-10 md:mb-16">
-        <div className="flex justify-center items-center gap-5 mt-5 md:mt-10">
+        <div className="flex justify-center items-center gap-5 mt-5 md:mt-10 relative">
           <input
             type="text"
             placeholder="Buscar..."
             className="w-1/2 md:w-3/5 p-1 md:p-3 rounded-lg border border-[#004280] focus:outline-none focus:border-[#004280]"
           />
-          <button className="bg-[#004280] text-white font-inter font-bold text-base md:text-lg py-1 px-3 md:px-5 md:py-2 rounded-lg">
-            Buscar
-          </button>
+          <div className="bg-gray-100 max-w-1/2 md:w-3/5 rounded-lg absolute z-10 top-10 md:top-14 p-5 grid grid-cols-1 xl:grid-cols-3 items-start place-items-center gap-y-5">
+          </div>
         </div>
       </form>
 

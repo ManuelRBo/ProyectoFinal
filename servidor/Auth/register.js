@@ -58,6 +58,7 @@ export default async function register(req, res) {
       birthdate: birthdate,
       exp: experience,
     });
+    console.log(user);
     try {
       await user.save();
       const payload = {
@@ -72,6 +73,7 @@ export default async function register(req, res) {
       });
       res.status(201).json({ message: "Usuario registrado correctamente" });
     } catch (error) {
+      console.log(error);
       if (error.code === 11000) {
         if (error.keyValue.email) {
           return res.status(400).json({

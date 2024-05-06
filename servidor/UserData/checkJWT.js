@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-export default function check(req, res) {
+export default function checkJWT(req, res, next) {
     try {
         if (!req.headers.cookie) {
             return res.status(401).json({ token: false });
@@ -16,11 +16,12 @@ export default function check(req, res) {
             return res.status(500).json({ token: false });
         }
 
-        jwt.verify(token, secretKey, (err) => {
+        jwt.verify(token, secretKey, (err, decoded) => {
             if (err) {
                 return res.status(401).json({ token: false });
-            };
-            return res.status(200).json({ token: true });
+            }
+            req.user = decoded;
+            next(); 
         });
     } catch (error) {
         console.error(error);

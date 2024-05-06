@@ -1,12 +1,8 @@
-export default function Messages({ img = 'https://randomuser.me/api/portraits/men/94.jpg', name, message}) {
+export default function Messages({ imgSrc, Icon, name, message}) {
     return (
             <div className="flex items-center gap-2">
-            <img
-                src={img}
-                alt="profile"
-                className="rounded-full"
-                width="40px"
-            />
+            {Icon && <Icon width="30px" />}
+            {imgSrc && <img src={imgSrc} alt="icon" width="40px" className="rounded-full"/>}
             <div className="overflow-hidden">
                 {name ? <h3 className="font-inter font-bold">{name}</h3> : ""}
                 {message ? <p className="font-inter whitespace-nowrap overflow-hidden text-ellipsis">{message}</p> : ""}

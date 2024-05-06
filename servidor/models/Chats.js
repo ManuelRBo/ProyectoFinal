@@ -6,7 +6,7 @@ const chatSchema = new Schema({
     members: [{ type: Types.ObjectId , required: true, ref: 'User'}],
     chat_name: { type: String, required: true },
     created_at: { type: Date, required: true, default: Date.now()},
-    updated_at: { type: Date, required: true, default: Date.now()},
+    img: { type: String, required: false },
 });
 
 const Chat = model('Chat', chatSchema);

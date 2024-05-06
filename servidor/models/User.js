@@ -10,8 +10,12 @@ const userSchema = new Schema({
     birthdate: { type: Date, required: true },
     exp: { type: String, required: true },
     img: { type: String, required: false, default: null},
-    friends: [{ type: Types.ObjectId, ref: 'User' }],
-    token_email: { type: String, required: false, default: null},
+    friends: [{
+        user : { type: Types.ObjectId, ref: 'User', required: true},
+        date: { type: Date, required: false, default: Date.now()}
+
+        }],
+    friend_requests: [{ type: Types.ObjectId, ref: 'User', required: false }],
 });
 
 const User = model("User", userSchema);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route  } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
@@ -15,11 +15,18 @@ import Messages from "../components/HomeComponents/Messages";
 import PrimaryPage from "../components/HomePages/PrimaryPage";
 import Chats from "../components/HomePages/Chats";
 import Friends from "../components/HomePages/Friends";
+import { useUserDataStore } from "../stores/userUserDataStore";
+import capitalizar from "../utils/capitalizar";
 
 export default function Home() {
   const [menuExpanded, setMenuExpanded] = useState(true);
   const [configOpen, setConfigOpen] = useState(false);
-  
+  const { userData, setUserData, userLoading } = useUserDataStore();
+
+  useEffect(() => {
+    setUserData();
+  }, [setUserData]);
+
   const close = () => {
     setConfigOpen(false);
   };
@@ -44,6 +51,10 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  if (userLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="h-lvh flex justify-evenly max-w-[97%] mx-auto">
       <aside className={`h-full w-1/6 flex flex-col items-start`}>
@@ -52,18 +63,22 @@ export default function Home() {
             menuExpanded ? "max-w-44 w-4/5" : "w-12"
           }`}
         >
-          
-            {window.innerWidth > 900 ? 
+          {window.innerWidth > 900 ? (
             <div className="flex items-center gap-3 pt-7 p-2">
-            <Bars3Icon
-              width="30px"
-              className="cursor-pointer"
-              onClick={handleMenu}
-            />
+              <Bars3Icon
+                width="30px"
+                className="cursor-pointer"
+                onClick={handleMenu}
+              />
               <div className="absolute left-14 w-28 lg:left-20">
-                <img src="/Logo.svg" alt="" width={"100px"}/>
+                <img src="/Logo.svg" alt="" width={"100px"} />
               </div>
-              </div> : <div className="w-16 pt-7 "><img src="/Logo.svg" alt="" width={"60px"}/></div>}
+            </div>
+          ) : (
+            <div className="w-16 pt-7 ">
+              <img src="/Logo.svg" alt="" width={"60px"} />
+            </div>
+          )}
           <hr className={`border-t border-gray-300 w-full`} />
           <div
             className={`w-full ${
@@ -71,8 +86,9 @@ export default function Home() {
             } `}
           >
             <MenuOption
-              Icon={UserCircleIcon}
-              text={menuExpanded ? "Manuel" : ""}
+              Icon={userData.user.img ? undefined : UserCircleIcon}
+              imgSrc={userData.user.img ? userData.user.img : undefined}
+              text={menuExpanded ? capitalizar(userData.user.username) : ""}
               onClick={() => setConfigOpen(true)}
             />
           </div>
@@ -101,7 +117,20 @@ export default function Home() {
               </h3>
             )}
             <div className="flex flex-col gap-3 w-full">
-              <div
+              {userData.chats_group > 0 ? (
+                userData.chats_group.map((chat) => (
+                  <MenuOption
+                    Icon={chat.img}
+                    text={menuExpanded ? chat.chat_name : ""}
+                    key={chat._id}
+                  />
+                ))
+              ) : menuExpanded ? (
+                <p>No hay canales</p>
+              ) : (
+                ""
+              )}
+              {/* <div
                 className={`flex items-center gap-1 hover:bg-gray-300 rounded-lg cursor-pointer w-full`}
               >
                 <MenuOption
@@ -134,7 +163,7 @@ export default function Home() {
                   )}
                   text={menuExpanded && "Node JS"}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -157,30 +186,42 @@ export default function Home() {
           <div className="flex items-center gap-5 pt-7 p-2">
             <ChatBubbleLeftRightIcon width="30px" />
             {menuExpanded && (
-              <h3 className="font-inter font-bold text-xl">Mensajes</h3>
+              <div className="flex flex-col">
+                <h3 className="font-inter font-bold text-xl">Mensajes</h3>
+                <p>{userData.chats_private <= 0 && "No hay chats"}</p>
+              </div>
             )}
           </div>
-          <div className="">
+          {userData.chats_private &&
+            userData.chats_private.map((chat) => (
+              <div key={chat._id}>
+                <Messages
+                  Icon={chat.img}
+                  name={menuExpanded ? chat.chat_name : ""}
+                  message={menuExpanded ? "Hola, ¿Cómo estás?" : ""}
+                />
+              </div>
+            ))}
+          {/* <div>
             <Messages
               name={menuExpanded ? "Manuel" : ""}
               message={menuExpanded ? "Hola, ¿Cómo estás?" : ""}
             />
           </div>
-          <div className="">
+          <div>
             <Messages
               name={menuExpanded ? "Manuel" : ""}
               message={menuExpanded ? "Hola, ¿Cómo estás?" : ""}
             />
           </div>
-          <div className="">
+          <div>
             <Messages
               name={menuExpanded ? "Manuel" : ""}
               message={menuExpanded ? "Hola, ¿Cómo estás?" : ""}
             />
-          </div>
+          </div> */}
         </div>
       </aside>
-
 
       <Transition
         show={configOpen}
@@ -204,7 +245,7 @@ export default function Home() {
             leave="transition ease-in-out duration-150 transform"
             leaveFrom="scale-100 opacity-100"
             leaveTo="scale-95 opacity-0"
-            style={{ maxWidth: "600px", width: "90%"}}
+            style={{ maxWidth: "600px", width: "90%" }}
           >
             <Dialog.Panel className="relative z-20 bg-white rounded-md shadow-lg mx-auto px-5 py-12">
               <form className="flex flex-col items-center gap-10 w-full">
