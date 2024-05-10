@@ -8,6 +8,7 @@ import {
   UsersIcon,
   UserCircleIcon,
   Bars3Icon,
+  ArrowLeftStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import { Icon } from "@iconify-icon/react";
 import MenuOption from "../components/HomeComponents/MenuOption";
@@ -18,11 +19,13 @@ import Friends from "../components/HomePages/Friends";
 import { useUserDataStore } from "../stores/userUserDataStore";
 import capitalizar from "../utils/capitalizar";
 import useSocketStore  from "../stores/useSocket";
+import { useAuthStore } from "../stores/useAuthStore";
 
 export default function Home() {
   const [menuExpanded, setMenuExpanded] = useState(true);
   const [configOpen, setConfigOpen] = useState(false);
   const { userData, setUserData, userLoading } = useUserDataStore();
+  const {logout} = useAuthStore();
 
   useEffect(() => {
     setUserData();
@@ -103,6 +106,13 @@ export default function Home() {
               text={menuExpanded ? capitalizar(userData.user.username) : ""}
               onClick={() => setConfigOpen(true)}
             />
+          </div>
+          <div className="text-red-600">
+            <MenuOption
+              Icon={ArrowLeftStartOnRectangleIcon}
+              text={menuExpanded ? "Cerrar Sesión" : ""}
+              onClick={() => logout()}
+              />
           </div>
           <hr className={`border-t border-gray-300 w-full`} />
           <div className="flex flex-col gap-4 w-full">

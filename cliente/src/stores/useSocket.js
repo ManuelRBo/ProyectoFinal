@@ -3,10 +3,11 @@ import io from 'socket.io-client';
 
 const useSocketStore = create((set) => ({
   socket: null,
-  connectSocket: (id) => {
-    const socket = io('http://localhost:3000');
+  connectSocket: () => {
+    const socket = io('http://localhost:3000',{
+      transports: ['websocket'],
+    });
     socket.on('connect', () => {
-      console.log(id);
       console.log('Usuario conectado');
     });
     socket.on('disconnect', () => {

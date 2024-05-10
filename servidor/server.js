@@ -6,6 +6,7 @@ import db from './database.js';
 import routes from './Routes/routes.js';
 import { Server } from 'socket.io';
 import mainSocket from './Sockets/mainSocket.js';
+import jwt from 'jsonwebtoken';
 
 const app = express();
 const server = http.createServer(app);
@@ -18,6 +19,17 @@ const io = new Server(server, {
  });
 
 const PORT = 3000;
+
+io.use((socket, next) => {
+  const token = socket.handshake.headers.cookie.split('=')[1];
+  const secret = "prueba";
+  jwt.verify(token, secret, (err, decoded) => {
+    if (err) {
+      return next(new Error('Authentication error'));
+    }
+    next();
+  });
+});
 
 io.on('connection', (socket) => {
   mainSocket(socket);

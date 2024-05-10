@@ -2,7 +2,6 @@ import User from '../models/User.js';
 import { body, validationResult } from "express-validator";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import io from '../server.js';
 
 export const loginValidator = [
     body('user_email').isString().withMessage('El email debe ser un string'),
@@ -34,8 +33,7 @@ export default async function login(req, res) {
             username: user.username,
         }
         const token = jwt.sign(payload, "prueba", {expiresIn: '1d'});
-        res.cookie('token', token, {httpOnly: true, secure: true, sameSite: 'strict', expires: new Date(Date.now() + 24 * 60 * 60 * 1000)});
-        io.engine.emit('login', user.id);
+        res.cookie('token', token, {httpOnly:true, secure: true, sameSite: 'strict', expires: new Date(Date.now() + 24 * 60 * 60 * 1000)});
         return res.status(200).json({message: 'Usuario autenticado correctamente'});
     }catch(error){
         console.log(error);

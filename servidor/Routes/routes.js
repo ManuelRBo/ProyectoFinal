@@ -15,6 +15,5 @@ routes.post("/auth/login", loginValidator, login)
 routes.post("/auth/check", check)
 routes.get("/userData/userData", checkJWT, userData)
 routes.get("/searchUsers", checkJWT, searchUsers)
-routes.post("/friends/addFriend", checkJWT, addFriend)
 
 export default routes
