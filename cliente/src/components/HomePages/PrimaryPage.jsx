@@ -1,6 +1,37 @@
 import Contact from "../HomeComponents/Contact";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
+import axios from "axios";
+import { useAuthStore } from "../../stores/useAuthStore.js";
 
 export default function PrimaryPage() {
+
+  const [ query, setQuery ] = useState("");
+  const [ loading, setLoading ] = useState(false);
+  const [ users, setUsers ] = useState([]);
+  const [ chats, setChats ] = useState([]);
+  const {isAuth, logout} = useAuthStore();
+
+  const handleInputChange= (e) => {
+    const query = e.target.value;
+    setQuery(query);
+    setLoading(true);
+    if(query === "") return setUsers([]) && setChats([]);
+    setTimeout(() => {
+    axios.get('/api/searchUsers', { params: { query } })
+        .then(res => {
+          setUsers(res.data.users);
+          setChats(res.data.chats);
+          setLoading(false);
+        })
+        .catch(err => {
+            logout();
+        });
+      }, 300);
+  }
+
+  if(!isAuth) return <Navigate to="/" />;
+
   return (
     <div>
       <h1 className="text-center font-inter text-2xl md:text-5xl font-bold text-[#004280]">
@@ -15,9 +46,30 @@ export default function PrimaryPage() {
           <input
             type="text"
             placeholder="Buscar..."
-            className="w-1/2 md:w-3/5 p-1 md:p-3 rounded-lg border border-[#004280] focus:outline-none focus:border-[#004280]"
+            className="w-2/3 md:w-3/5 p-1 md:p-3 rounded-lg border border-[#004280] focus:outline-none focus:border-[#004280]"
+            value={query}
+            onChange={handleInputChange}
           />
-          <div className="bg-gray-100 max-w-1/2 md:w-3/5 rounded-lg absolute z-10 top-10 md:top-14 p-5 grid grid-cols-1 xl:grid-cols-3 items-start place-items-center gap-y-5">
+          
+          <div className={`bg-gray-100 w-2/3 md:w-3/5 rounded-lg absolute z-10 top-10 md:top-14 p-5 ${query !== "" ? "block" : "hidden"}`}>
+            {loading ? <p>Cargando...</p> :
+            <>
+            <div className="mb-5">
+              <h3 className="text-2xl font-bold font-inter mb-2">Usuarios</h3>
+              <div className="grid grid-cols-1 xl:grid-cols-3 2xl:grid-cols-4 gap-y-5">
+              {users.length > 0 ? users.map(user => (
+                <Contact key={user.username} username={user.username} img={user.img} friend={user.friend} id={user.id}/>
+              )) : <p>No hay resultados</p>}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold font-inter mb-2">Chats</h3>
+              {chats.length > 0 ? chats.map(chat => (
+                <Contact key={chat.chat_name} username={chat.chat_name} img={chat.img} />
+              )) : <p>No hay resultados</p>}
+            </div>
+            </>
+            }
           </div>
         </div>
       </form>

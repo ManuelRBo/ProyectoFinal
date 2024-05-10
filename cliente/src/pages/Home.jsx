@@ -17,6 +17,7 @@ import Chats from "../components/HomePages/Chats";
 import Friends from "../components/HomePages/Friends";
 import { useUserDataStore } from "../stores/userUserDataStore";
 import capitalizar from "../utils/capitalizar";
+import useSocketStore  from "../stores/useSocket";
 
 export default function Home() {
   const [menuExpanded, setMenuExpanded] = useState(true);
@@ -51,9 +52,20 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+
+  const { connectSocket, disconnectSocket } = useSocketStore();
+
+  useEffect(() => {
+    connectSocket();
+    return () => {
+      disconnectSocket();
+    };
+  }, [connectSocket, disconnectSocket]);
+
   if (userLoading) {
     return <div>Loading...</div>;
   }
+
 
   return (
     <div className="h-lvh flex justify-evenly max-w-[97%] mx-auto">
