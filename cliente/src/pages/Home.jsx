@@ -20,12 +20,15 @@ import { useUserDataStore } from "../stores/userUserDataStore";
 import capitalizar from "../utils/capitalizar";
 import useSocketStore  from "../stores/useSocket";
 import { useAuthStore } from "../stores/useAuthStore";
+import axios from "axios";
 
 export default function Home() {
   const [menuExpanded, setMenuExpanded] = useState(true);
   const [configOpen, setConfigOpen] = useState(false);
   const { userData, setUserData, userLoading } = useUserDataStore();
   const {logout} = useAuthStore();
+  const { socket } = useSocketStore();
+
 
   useEffect(() => {
     setUserData();
@@ -64,6 +67,14 @@ export default function Home() {
       disconnectSocket();
     };
   }, [connectSocket, disconnectSocket]);
+
+  socket?.on("friendRequest", (data) => {
+    axios.get("/userData/userData").then((res) => {
+      const { user, chats_group, chats_private } = res.data;
+
+    });
+  });
+
 
   if (userLoading) {
     return <div>Loading...</div>;

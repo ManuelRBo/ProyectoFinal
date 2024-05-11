@@ -1,18 +1,21 @@
 import User from '../models/User.js';
 import mongoose from 'mongoose';
+import io from '../server.js'
 
-export default async function addFriend(req, res) {
-    const { id } = req.body;
+export default async function addFriend(userSockets, myUser, userIDFriend) {
+    console.log(userIDFriend);
+    const userToSend = userSockets.get(userIDFriend);
 
     try{
-        if(!mongoose.Types.ObjectId.isValid(id)) return res.status(400).json({error: 'Invalid id'});
-        const user = await User.findById(id);
-        user.friend_requests.push(req.user.id);
+        if(!mongoose.Types.ObjectId.isValid(userIDFriend)) return new Error('Invalid user ID');
+        const user = await User.findById(userIDFriend);
+        user.friend_requests.push(myUser);
         await user.save();
-        return res.status(200).json({message: 'Friend request sent'});
+        if(userToSend) io.to(userToSend).emit('friendRequest', myUser);
+        return true;
 
     }catch(err){
         console.error(err);
-        return res.status(500).json({error: 'Internal server error'});
+        return new Error('Error adding friend');
     }
 }
