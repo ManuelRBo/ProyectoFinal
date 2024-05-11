@@ -6,6 +6,10 @@ import userData from "../UserData/userData.js";
 import checkJWT from "../UserData/checkJWT.js";
 import searchUsers from "../Users/searchUsers.js";
 import logout from "../Auth/logout.js";
+import userRequestData from "../UserData/userRequestData.js";
+import acceptFriend from "../Users/acceptFriend.js";
+import rejectFriend from "../Users/rejectFriend.js";
+import userFriendsData from "../UserData/userFriendsData.js";
 
 const routes = Router();
 
@@ -15,5 +19,9 @@ routes.post("/auth/logout", checkJWT, logout)
 routes.post("/auth/check", check)
 routes.get("/userData/userData", checkJWT, userData)
 routes.get("/searchUsers", checkJWT, searchUsers)
+routes.get("/userData/userRequestData", checkJWT, userRequestData)
+routes.get("/userData/userFriendsData", checkJWT, userFriendsData)
+routes.patch("/userData/acceptFriend", checkJWT, acceptFriend)
+routes.patch("/userData/rejectFriend", checkJWT, rejectFriend)
 
 export default routes

@@ -12,8 +12,8 @@ const userSchema = new Schema({
     img: { type: String, required: false, default: null},
     friends: [{
         user : { type: Types.ObjectId, ref: 'User', required: true},
-        date: { type: Date, required: false, default: Date.now()}
-
+        date: { type: Date, required: false, default: Date.now()},
+        _id: false,
         }],
     friend_requests: [{ type: Types.ObjectId, ref: 'User', required: false }],
 });

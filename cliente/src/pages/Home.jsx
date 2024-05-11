@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import { ToastContainer, Bounce, toast } from "react-toastify";
 import {
   ChatBubbleLeftRightIcon,
   HomeIcon,
@@ -15,19 +16,21 @@ import MenuOption from "../components/HomeComponents/MenuOption";
 import Messages from "../components/HomeComponents/Messages";
 import PrimaryPage from "../components/HomePages/PrimaryPage";
 import Chats from "../components/HomePages/Chats";
-import Friends from "../components/HomePages/Friends";
 import { useUserDataStore } from "../stores/userUserDataStore";
 import capitalizar from "../utils/capitalizar";
 import useSocketStore  from "../stores/useSocket";
 import { useAuthStore } from "../stores/useAuthStore";
-import axios from "axios";
+
+const Friends = lazy(() => import("../components/HomePages/Friends"));
 
 export default function Home() {
   const [menuExpanded, setMenuExpanded] = useState(true);
   const [configOpen, setConfigOpen] = useState(false);
+  const [friendsOpen, setFriendsOpen] = useState(false);
   const { userData, setUserData, userLoading } = useUserDataStore();
   const {logout} = useAuthStore();
   const { socket } = useSocketStore();
+
 
 
   useEffect(() => {
@@ -68,12 +71,15 @@ export default function Home() {
     };
   }, [connectSocket, disconnectSocket]);
 
-  socket?.on("friendRequest", (data) => {
-    axios.get("/userData/userData").then((res) => {
-      const { user, chats_group, chats_private } = res.data;
 
-    });
-  });
+  useEffect(() => {
+    if (socket) {
+      socket.on("friendRequest", (res) => {
+        setFriendsOpen(res.success);
+        toast.info("Tienes una nueva solicitud de amistad");
+      });
+    }
+  }, [socket]);
 
 
   if (userLoading) {
@@ -206,7 +212,7 @@ export default function Home() {
         <Routes>
           <Route path="/" element={<PrimaryPage />} />
           <Route path="/chat" element={<Chats />} />
-          <Route path="/friends" element={<Friends />} />
+          <Route path="/friends" element={<Friends friendsOpen={friendsOpen}/>} />
         </Routes>
       </main>
 
@@ -255,6 +261,20 @@ export default function Home() {
           </div> */}
         </div>
       </aside>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
 
       <Transition
         show={configOpen}
