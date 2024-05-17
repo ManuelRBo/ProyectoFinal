@@ -7,7 +7,7 @@ export const useUserDataStore = create((set) => ({
     userRequestData: [],
     userFriendsData: [],
     setUserData: () => {
-        axios.get('api/userdata/userData')
+        axios.get('/api/userdata/userData')
         .then(res => {
             set({
                 userData: res.data,

@@ -1,13 +1,12 @@
 import { Schema, model, Types } from 'mongoose';
 
 const chatSchema = new Schema({
-    chat_id: { type: String, required: true, unique: true },
+    _id: { type: String, required: true, unique: true },
     type: { type: String, required: true, enum: ['private', 'group']},
     members: [{ type: Types.ObjectId , required: true, ref: 'User'}],
-    chat_name: { type: String, required: true },
-    created_at: { type: Date, required: true, default: Date.now()},
+    chat_name: { type: String, required: false },
     img: { type: String, required: false },
-});
+}, {timestamps: true});
 
 const Chat = model('Chat', chatSchema);
 

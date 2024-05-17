@@ -1,5 +1,5 @@
 import Contact from "../HomeComponents/Contact";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { useAuthStore } from "../../stores/useAuthStore.js";
@@ -11,6 +11,7 @@ export default function PrimaryPage() {
   const [ users, setUsers ] = useState([]);
   const [ chats, setChats ] = useState([]);
   const {isAuth, logout} = useAuthStore();
+  const [ friendsData, setFriendsData ] = useState([]);
 
   const handleInputChange= (e) => {
     const query = e.target.value;
@@ -29,6 +30,12 @@ export default function PrimaryPage() {
         });
       }, 300);
   }
+
+  useEffect(() => {
+    axios.get("/api/userData/userFriendsData").then((res) => {
+      setFriendsData(res.data);
+    });
+  }, [setFriendsData]);
 
   if(!isAuth) return <Navigate to="/" />;
 
@@ -77,12 +84,9 @@ export default function PrimaryPage() {
       <div className="max-w-7xl">
         <h2 className="text-lg md:text-3xl max-md:text-center font-inter font-black mb-4 md:mb-8">Últimos Amigos Agregados</h2>
         <div className="flex flex-wrap justify-center md:justify-start lg:justify-between gap-4 max-w-6xl mx-auto">
-          <Contact />
-          <Contact />
-          <Contact />
-          <Contact />
-          <Contact />
-          <Contact />
+          {friendsData && friendsData.slice(0,5).map(friend => (
+            <Contact key={friend.username} username={friend.username} img={friend.img} friend={true} id={friend.id}/>
+          ))}
         </div>
       </div>
 

@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ToastContainer, Bounce, toast } from "react-toastify";
@@ -28,10 +28,8 @@ export default function Home() {
   const [configOpen, setConfigOpen] = useState(false);
   const [friendsOpen, setFriendsOpen] = useState(false);
   const { userData, setUserData, userLoading } = useUserDataStore();
-  const {logout} = useAuthStore();
+  const { logout } = useAuthStore();
   const { socket } = useSocketStore();
-
-
 
   useEffect(() => {
     setUserData();
@@ -71,6 +69,7 @@ export default function Home() {
     };
   }, [connectSocket, disconnectSocket]);
 
+  const location = useLocation();
 
   useEffect(() => {
     if (socket) {
@@ -78,8 +77,23 @@ export default function Home() {
         setFriendsOpen(res.success);
         toast.info("Tienes una nueva solicitud de amistad");
       });
+
+      socket.on("new-message", (res) => {
+        console.log(res);
+        setUserData();
+        console.log(location.pathname === "/home/chat/" + res.chat_id);
+        
+        if (location.pathname != "/home/chat/" + res.chat_id){
+          console.log("entra");
+          toast.info("Tienes un nuevo mensaje");
+        }
+      });
+      return () => {
+        socket.off("friendRequest");
+        socket.off("new-message");
+      };
     }
-  }, [socket]);
+  }, [socket, setUserData, location.pathname]);
 
 
   if (userLoading) {
@@ -211,7 +225,7 @@ export default function Home() {
       <main className="w-4/5 mt-6 h-[calc(100vh-40px)]">
         <Routes>
           <Route path="/" element={<PrimaryPage />} />
-          <Route path="/chat" element={<Chats />} />
+          <Route path="/chat/:id" element={<Chats />} />
           <Route path="/friends" element={<Friends friendsOpen={friendsOpen}/>} />
         </Routes>
       </main>
@@ -227,17 +241,17 @@ export default function Home() {
             {menuExpanded && (
               <div className="flex flex-col">
                 <h3 className="font-inter font-bold text-xl">Mensajes</h3>
-                <p>{userData.chats_private <= 0 && "No hay chats"}</p>
+                <p>{userData.chats_private_data <= 0 && "No hay chats"}</p>
               </div>
             )}
           </div>
-          {userData.chats_private &&
-            userData.chats_private.map((chat) => (
+          {userData.chats_private_data.length > 0 &&
+            userData.chats_private_data.map((chat) => (
               <div key={chat._id}>
                 <Messages
-                  Icon={chat.img}
-                  name={menuExpanded ? chat.chat_name : ""}
-                  message={menuExpanded ? "Hola, ¿Cómo estás?" : ""}
+                  Icon={UserCircleIcon}
+                  name={menuExpanded ? chat.friend.username : ""}
+                  message={menuExpanded ? chat.last_message.message ? chat.last_message.message : "" : ""}
                 />
               </div>
             ))}

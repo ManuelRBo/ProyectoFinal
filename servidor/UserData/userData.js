@@ -8,8 +8,16 @@ export default async function userData(req, res){
     try{
         const user = await User.findById(user_id).select('username img -_id');
         const chats_group = await Chat.find({members: user_id}).find({type: 'group'}).select('chat_name img');
-        const chats_private = await Chat.find({members: user_id}).find({type: 'private'}).select('chat_name img');
-        res.json({user, chats_group, chats_private});
+        const chats_private = await Chat.find({members: user_id}).find({type: 'private'}).select('members');
+        const chats_private_data = [];
+        for(let i = 0; i < chats_private.length; i++){
+            const chat = chats_private[i];
+            const friend_id = chat.members.find(id => id != user_id);
+            const friend = await User.findById(friend_id).select('username img -_id');
+            const last_message = await Message.findOne({chat_id: chat._id}).sort({createdAt: -1}).select('message date -_id');
+            chats_private_data.push({friend, last_message, _id: chat._id});
+        }
+        res.json({user, chats_group, chats_private_data});
     }catch(e){
         console.log(e);
     }

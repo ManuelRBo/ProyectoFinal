@@ -1,6 +1,8 @@
 export const userSockets = new Map();
 import jwt from 'jsonwebtoken';
 import addFriend from '../Users/addFriend.js';
+import saveMessage, { sanitizeInput } from '../Chats/saveMessage.js';
+
  
 
 export default function mainSocket(socket) {
@@ -27,4 +29,16 @@ export default function mainSocket(socket) {
 
     });
 
+    socket.on('send-message', async ({ chat_id, message }, callback)=>{
+        try{
+            chat_id = sanitizeInput(chat_id);
+            message = sanitizeInput(message);
+            const response = await saveMessage(userSockets, user, chat_id, message);
+            console.log('Mensaje enviado');
+            callback({success: true});
+        }catch(err){
+            console.log(err);
+            callback({error: 'Internal server error'});
+        }
+    });
 }

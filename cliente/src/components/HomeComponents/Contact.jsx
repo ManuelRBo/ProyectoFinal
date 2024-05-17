@@ -3,6 +3,7 @@ import axios from "axios";
 import useSocketStore from "../../stores/useSocket";
 import { toast } from "react-toastify";
 import {useUserDataStore} from "../../stores/userUserDataStore";
+import { useNavigate } from "react-router-dom";
 
 export default function Contact({ img, username, friend, id }) {
   const [hover, setHover] = useState(false);
@@ -49,6 +50,16 @@ export default function Contact({ img, username, friend, id }) {
     })
   };
 
+  const navigate = useNavigate();
+
+  const handleChat = () => {
+    axios.post("/api/chat/createChat", { id })
+    .then(res => {
+        navigate(`/home/chat/${res.data.id}`);
+    })
+
+  };
+
   return (
     <div
       className="flex items-center gap-1"
@@ -75,7 +86,7 @@ export default function Contact({ img, username, friend, id }) {
           {username ? username : "Manuel"}
         </h3>
       ) : friend === true && hover ? (
-        <p className="text-xs md:text-sm text-center font-inter bg-[#0085FF] font-semibold w-[110px] text-white rounded-lg p-1 md:p-2 cursor-pointer">
+        <p className="text-xs md:text-sm text-center font-inter bg-[#0085FF] font-semibold w-[110px] text-white rounded-lg p-1 md:p-2 cursor-pointer" onClick={handleChat}>
           Chat
         </p>
       ) : (

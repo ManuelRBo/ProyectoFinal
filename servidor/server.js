@@ -22,6 +22,7 @@ const PORT = 3000;
 
 io.use((socket, next) => {
   const token = socket.handshake.headers.cookie.split('=')[1];
+
   const secret = "prueba";
   jwt.verify(token, secret, (err, decoded) => {
     if (err) {

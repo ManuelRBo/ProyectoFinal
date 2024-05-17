@@ -5,7 +5,7 @@ export default function Messages({ imgSrc, Icon, name, message}) {
             {imgSrc && <img src={imgSrc} alt="icon" width="40px" className="rounded-full"/>}
             <div className="overflow-hidden">
                 {name ? <h3 className="font-inter font-bold">{name}</h3> : ""}
-                {message ? <p className="font-inter whitespace-nowrap overflow-hidden text-ellipsis">{message}</p> : ""}
+                {message !== null ? <p className="font-inter whitespace-nowrap overflow-hidden text-ellipsis">{message}</p> : ""}
             </div>
             </div>
     );

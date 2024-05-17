@@ -5,7 +5,7 @@ export default async function userFriendsData(req, res) {
     const arrayFriends = [];
     const token = req.headers.cookie.split('=')[1];
     const user = jwt.decode(token).id;
-    const userData = await User.findById(user);
+    const userData = await User.findById(user).sort({ 'friends.date': -1 });
     const userFriends = userData.friends;
     for (const user of userFriends) {
         const userRequest = await User.findById(user.user);

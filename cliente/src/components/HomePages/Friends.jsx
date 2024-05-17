@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 export default function Friends({friendsOpen}) {
 
-  const {userRequestData, setUserRequestData, userLoading, userFriendsData, setUserFriendsData} = useUserDataStore();
+  const {userRequestData, setUserRequestData, userLoading, userFriendsData, setUserFriendsData, setUserData} = useUserDataStore();
   const {socket} = useSocketStore();
 
   useEffect(() => {

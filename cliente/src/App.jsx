@@ -14,7 +14,6 @@ function App() {
     const checkAuthStatus = async () => {
       try {
         const response = await axios.post("/api/auth/check");
-        console.log(response.data);
         if (response.data.token) {
           login();
         }
