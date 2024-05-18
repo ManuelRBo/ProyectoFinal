@@ -8,6 +8,7 @@ import MessageBox from "../MessageBox";
 import axios from "axios";
 import useSocketStore from "../../stores/useSocket.js";
 import convertirHora from "../../utils/convertirHora.js";
+import { useUserDataStore } from "../../stores/userUserDataStore.js";
 
 export default function Chats() {
   const { id } = useParams();
@@ -16,6 +17,7 @@ export default function Chats() {
   const [messages, setMessages] = useState([]);
   const { register, handleSubmit, watch, reset } = useForm();
   const { socket } = useSocketStore();
+  const { setUserData } = useUserDataStore();
   const endMessage = useRef(null);
 
   const scrollToBottom = () => {
@@ -44,6 +46,7 @@ export default function Chats() {
       { chat_id: id, message: data.messageToSend },
       (res) => {
         if (res.success) {
+          setUserData();
           setMessages((prevMessages) => [
             ...prevMessages,
             {
@@ -68,6 +71,10 @@ export default function Chats() {
         },
       ]);
     });
+
+    return () => {
+      socket.off("new-message");
+    };
   }, [socket]);
 
   useEffect(() => {

@@ -30,6 +30,7 @@ export default function Home() {
   const { userData, setUserData, userLoading } = useUserDataStore();
   const { logout } = useAuthStore();
   const { socket } = useSocketStore();
+  const [ newMessage, setNewMessage ] = useState(false);
 
   useEffect(() => {
     setUserData();
@@ -79,13 +80,11 @@ export default function Home() {
       });
 
       socket.on("new-message", (res) => {
-        console.log(res);
         setUserData();
-        console.log(location.pathname === "/home/chat/" + res.chat_id);
         
         if (location.pathname != "/home/chat/" + res.chat_id){
-          console.log("entra");
           toast.info("Tienes un nuevo mensaje");
+          setNewMessage(true);
         }
       });
       return () => {
@@ -232,11 +231,11 @@ export default function Home() {
 
       <aside className={`h-full w-1/6 flex flex-col items-end`}>
         <div
-          className={`h-full flex flex-col gap-5 items-start ${
+          className={`h-full flex flex-col gap-3 items-start ${
             menuExpanded ? "max-w-56 w-4/5" : "w-12"
           }`}
         >
-          <div className="flex items-center gap-5 pt-7 p-2">
+          <div className="flex items-center gap-3 pt-7 p-2">
             <ChatBubbleLeftRightIcon width="30px" />
             {menuExpanded && (
               <div className="flex flex-col">
@@ -247,11 +246,12 @@ export default function Home() {
           </div>
           {userData.chats_private_data.length > 0 &&
             userData.chats_private_data.map((chat) => (
-              <div key={chat._id}>
+              <div key={chat._id} className="py-2 w-full">
                 <Messages
                   Icon={UserCircleIcon}
                   name={menuExpanded ? chat.friend.username : ""}
                   message={menuExpanded ? chat.last_message.message ? chat.last_message.message : "" : ""}
+                  newMessage={newMessage}
                 />
               </div>
             ))}
