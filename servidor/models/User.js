@@ -16,6 +16,13 @@ const userSchema = new Schema({
         _id: false,
         }],
     friend_requests: [{ type: Types.ObjectId, ref: 'User', required: false }],
+    channels: [
+        {
+            channel: { type: Types.ObjectId, ref: 'Chat', required: true },
+            date: { type: Date, required: false, default: Date.now() },
+            _id: false,
+        },
+    ],
 });
 
 const User = model("User", userSchema);
