@@ -9,21 +9,26 @@ export default async function searchUsers(req, res) {
         const query = req.query.query
         const users = await User.find({ username: { $regex: query, $options: 'i' }, _id: { $ne: actualUser }});
         const chats = await Chat.find({ chat_name: { $regex: query, $options: 'i' }, type: 'group'});
+        const usersResult = users.map(user => {
+            return {
+                id: user._id,
+                username: user.username,
+                img: user.img,
+                friend : user.friends.some(friend => friend.user.toString() === actualUser)
+            }
+        });
+        const chatsResult = chats.map(chat => {
+            return {
+                id: chat._id,
+                chat_name: chat.chat_name,
+                img: chat.img,
+                userInChat: chat.members.some(user => user.toString() === actualUser)
+            }
+        })
+
         res.json({
-            users: users.map(user => {
-                return {
-                    id: user._id,
-                    username: user.username,
-                    img: user.img,
-                    friend : user.friends.some(friend => friend.user.toString() === actualUser)
-                }
-            }),
-            chats: chats.map(chat => {
-                return {
-                    chat_name: chat.chat_name,
-                    img: chat.img,
-                }
-            })
+            users: usersResult,
+            chats: chatsResult
         })
         
     } catch (error) {

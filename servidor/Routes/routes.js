@@ -13,6 +13,7 @@ import userFriendsData from "../UserData/userFriendsData.js";
 import createChat from "../Chats/createChat.js";
 import dataChat from "../Chats/dataChat.js";
 import getMessages from "../Chats/getMessages.js";
+import followChat from "../Chats/followChat.js";
 
 const routes = Router();
 
@@ -21,6 +22,7 @@ routes.post("/auth/login", loginValidator, login)
 routes.post("/auth/logout", checkJWT, logout)
 routes.post("/auth/check", check)
 routes.post("/chat/createChat", checkJWT, createChat)
+routes.post("/chat/followChat", checkJWT, followChat)
 routes.get("/userData/userData", checkJWT, userData)
 routes.get("/searchUsers", checkJWT, searchUsers)
 routes.get("/userData/userRequestData", checkJWT, userRequestData)

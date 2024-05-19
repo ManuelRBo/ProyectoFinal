@@ -4,11 +4,16 @@ import useSocketStore from "../../stores/useSocket";
 import { toast } from "react-toastify";
 import {useUserDataStore} from "../../stores/userUserDataStore";
 import { useNavigate } from "react-router-dom";
+import { Icon } from "@iconify-icon/react";
 
-export default function Contact({ img, username, friend, id }) {
+
+export default function Contact({ img, iconName, username, friend, id, userInChat }) {
   const [hover, setHover] = useState(false);
   const { socket } = useSocketStore();
   const { setUserRequestData, setUserFriendsData } = useUserDataStore();
+
+  if(img === null) img = "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png";
+
 
   const handleHover = () => {
     setHover(true);
@@ -57,8 +62,14 @@ export default function Contact({ img, username, friend, id }) {
     .then(res => {
         navigate(`/home/chat/${res.data.id}`);
     })
-
   };
+
+  const handleFollowChat = () => {
+    axios.post("/api/chat/followChat", { id })
+    .then(res => {
+        console.log(res.data);
+    })
+  }
 
   return (
     <div
@@ -67,12 +78,15 @@ export default function Contact({ img, username, friend, id }) {
       onMouseLeave={handleLeave}
     >
       <div className="relative">
-        <img
-          src={img ? img : "https://randomuser.me/api/portraits/men/94.jpg"}
-          alt=""
-          className="rounded-full w-10 md:w-16"
-        />
-        <div className="bg-green-500 rounded-full w-3 h-3 md:w-4 md:h-4 absolute right-0 bottom-[0.5px]"></div>
+      {iconName && <Icon icon={iconName} width="40px" />}
+        {img && !iconName &&
+          <img
+            src={img}
+            alt="icon"
+            width="40px"
+            className="rounded-full w-10 md:w-16"
+          />}
+          {!iconName && <div className="bg-green-500 rounded-full w-3 h-3 md:w-4 md:h-4 absolute right-0 bottom-[0.5px]"></div>}
       </div>
       {friend === false && hover ? (
         <p
@@ -90,11 +104,22 @@ export default function Contact({ img, username, friend, id }) {
           Chat
         </p>
       ) : (
-        friend === "pendiente" && hover && 
+        friend === "pendiente" && hover ? (
         <div className="flex gap-3">
             <button className="text-xs md:text-sm text-center font-inter bg-green-500 font-semibold text-white rounded-lg p-1 md:p-2 cursor-pointer" onClick={handleAcceptFriend}>Aceptar</button>
             <button className="text-xs md:text-sm text-center font-inter bg-red-500 font-semibold text-white rounded-lg p-1 md:p-2 cursor-pointer" onClick={handleRejectFriend}>Rechazar</button>
         </div>
+        ) : (
+        userInChat===false && hover ? (
+          <p className="text-xs md:text-sm text-center font-inter bg-[#0085FF] font-semibold w-[110px] text-white rounded-lg p-1 md:p-2 cursor-pointer" onClick={handleFollowChat}>
+          Seguir
+        </p>
+        ) : (
+          <p className="text-xs md:text-sm text-center font-inter bg-[#0085FF] font-semibold w-[110px] text-white rounded-lg p-1 md:p-2 cursor-pointer" onClick={handleChat}>
+          Chat
+        </p>
+      ) 
+      )
       )}
     </div>
   );

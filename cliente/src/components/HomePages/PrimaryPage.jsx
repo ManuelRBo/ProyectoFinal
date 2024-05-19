@@ -72,7 +72,7 @@ export default function PrimaryPage() {
             <div>
               <h3 className="text-2xl font-bold font-inter mb-2">Chats</h3>
               {chats.length > 0 ? chats.map(chat => (
-                <Contact key={chat.chat_name} username={chat.chat_name} img={chat.img} />
+                <Contact key={chat.id} username={chat.chat_name} iconName={chat.img} userInChat={chat.userInChat} id={chat.id} />
               )) : <p>No hay resultados</p>}
             </div>
             </>
@@ -84,9 +84,9 @@ export default function PrimaryPage() {
       <div className="max-w-7xl">
         <h2 className="text-lg md:text-3xl max-md:text-center font-inter font-black mb-4 md:mb-8">Últimos Amigos Agregados</h2>
         <div className="flex flex-wrap justify-center md:justify-start lg:justify-between gap-4 max-w-6xl mx-auto">
-          {friendsData && friendsData.slice(0,5).map(friend => (
+          {friendsData.length > 0 ? friendsData.slice(0,5).map(friend => (
             <Contact key={friend.username} username={friend.username} img={friend.img} friend={true} id={friend.id}/>
-          ))}
+          )) : <p>No existen ultimos amgios agregados</p>}
         </div>
       </div>
 
