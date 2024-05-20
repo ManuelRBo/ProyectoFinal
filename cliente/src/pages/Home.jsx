@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ToastContainer, Bounce, toast } from "react-toastify";
@@ -11,26 +11,26 @@ import {
   Bars3Icon,
   ArrowLeftStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
-import { Icon } from "@iconify-icon/react";
 import MenuOption from "../components/HomeComponents/MenuOption";
 import Messages from "../components/HomeComponents/Messages";
 import PrimaryPage from "../components/HomePages/PrimaryPage";
 import Chats from "../components/HomePages/Chats";
 import { useUserDataStore } from "../stores/userUserDataStore";
 import capitalizar from "../utils/capitalizar";
-import useSocketStore  from "../stores/useSocket";
+import useSocketStore from "../stores/useSocket";
 import { useAuthStore } from "../stores/useAuthStore";
 
 const Friends = lazy(() => import("../components/HomePages/Friends"));
 
 export default function Home() {
+  const navigate = useNavigate();
   const [menuExpanded, setMenuExpanded] = useState(true);
   const [configOpen, setConfigOpen] = useState(false);
   const [friendsOpen, setFriendsOpen] = useState(false);
   const { userData, setUserData, userLoading } = useUserDataStore();
   const { logout } = useAuthStore();
   const { socket } = useSocketStore();
-  const [ newMessage, setNewMessage ] = useState(false);
+  const [newMessage, setNewMessage] = useState([]);
 
   useEffect(() => {
     setUserData();
@@ -60,7 +60,6 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
   const { connectSocket, disconnectSocket } = useSocketStore();
 
   useEffect(() => {
@@ -81,10 +80,13 @@ export default function Home() {
 
       socket.on("new-message", (res) => {
         setUserData();
-        
-        if (location.pathname != "/home/chat/" + res.chat_id){
+
+        if (location.pathname != "/home/chat/" + res.chat_id) {
           toast.info("Tienes un nuevo mensaje");
-          setNewMessage(true);
+          setNewMessage((prev) =>[
+            ...prev,
+            {chat_id: res.chat_id}
+          ])
         }
       });
       return () => {
@@ -94,11 +96,9 @@ export default function Home() {
     }
   }, [socket, setUserData, location.pathname]);
 
-
   if (userLoading) {
     return <div>Loading...</div>;
   }
-
 
   return (
     <div className="h-lvh flex justify-evenly max-w-[97%] mx-auto">
@@ -142,7 +142,7 @@ export default function Home() {
               Icon={ArrowLeftStartOnRectangleIcon}
               text={menuExpanded ? "Cerrar Sesión" : ""}
               onClick={() => logout()}
-              />
+            />
           </div>
           <hr className={`border-t border-gray-300 w-full`} />
           <div className="flex flex-col gap-4 w-full">
@@ -169,19 +169,25 @@ export default function Home() {
               </h3>
             )}
             <div className="flex flex-col gap-3 w-full">
-              {userData.chats_group > 0 ? (
-                userData.chats_group.map((chat) => (
-                  <MenuOption
-                    Icon={chat.img}
-                    text={menuExpanded ? chat.chat_name : ""}
-                    key={chat._id}
-                  />
-                ))
-              ) : menuExpanded ? (
-                <p>No hay canales</p>
-              ) : (
-                ""
-              )}
+              {(() => {
+                const groupChats = userData.combinedChats.filter(
+                  (chat) => chat.type === "group"
+                );
+                return groupChats.length > 0 ? (
+                  groupChats.map((chat) => (
+                    <MenuOption
+                      to={"/home/chat/" + chat.chat._id}
+                      iconLogo={chat.chat.img}
+                      text={menuExpanded ? chat.chat.chat_name : ""}
+                      key={chat.chat._id}
+                    />
+                  ))
+                ) : menuExpanded ? (
+                  <p>No hay canales</p>
+                ) : (
+                  ""
+                );
+              })()}
               {/* <div
                 className={`flex items-center gap-1 hover:bg-gray-300 rounded-lg cursor-pointer w-full`}
               >
@@ -225,7 +231,10 @@ export default function Home() {
         <Routes>
           <Route path="/" element={<PrimaryPage />} />
           <Route path="/chat/:id" element={<Chats />} />
-          <Route path="/friends" element={<Friends friendsOpen={friendsOpen}/>} />
+          <Route
+            path="/friends"
+            element={<Friends friendsOpen={friendsOpen} />}
+          />
         </Routes>
       </main>
 
@@ -244,17 +253,43 @@ export default function Home() {
               </div>
             )}
           </div>
-          {userData.chats_private_data.length > 0 &&
-            userData.chats_private_data.map((chat) => (
-              <div key={chat._id} className="py-2 w-full">
+          {userData.combinedChats.length > 0 &&
+            userData.combinedChats.map((chat) => (
+              <div
+                key={chat.chat._id}
+                className="py-2 w-full cursor-pointer"
+                onClick={() => {
+                  navigate("/home/chat/" + chat.chat._id);
+                  setNewMessage(newMessage.filter((message) => message.chat_id !== chat.chat._id))
+                }}
+              >
                 <Messages
-                  Icon={UserCircleIcon}
-                  name={menuExpanded ? chat.friend.username : ""}
-                  message={menuExpanded ? chat.last_message.message ? chat.last_message.message : "" : ""}
-                  newMessage={newMessage}
+                  iconLogo={chat.type === "group" ? chat.chat.img : undefined}
+                  Icon={chat.type === "private" ? UserCircleIcon : undefined}
+                  imgSrc={
+                    chat.type === "private"
+                      ? chat.chat.img
+                      : undefined
+                  }
+                  name={
+                    menuExpanded
+                      ? chat.type === "private"
+                        ? chat.friend.username
+                        : chat.chat.chat_name
+                      : ""
+                  }
+                  message={
+                    menuExpanded
+                      ? chat.last_message && chat.last_message.message
+                        ? chat.last_message.message
+                        : ""
+                      : ""
+                  }
+                  newMessage={newMessage.find((message) => message.chat_id === chat.chat._id) ? true : false}
                 />
               </div>
             ))}
+
           {/* <div>
             <Messages
               name={menuExpanded ? "Manuel" : ""}
@@ -317,14 +352,19 @@ export default function Home() {
             <Dialog.Panel className="relative z-20 bg-white rounded-md shadow-lg mx-auto px-5 py-12">
               <form className="flex flex-col items-center gap-10 w-full">
                 <h2 className="text-center font-bold font-inter text-4xl">
-                  Configuración
+                  Perfil
                 </h2>
                 <div className="flex flex-col gap-3 items-center">
-                  <img
-                    className="rounded-full"
-                    src="https://randomuser.me/api/portraits/men/94.jpg"
-                    alt=""
-                  />
+              {userData.user.img ? (
+                <img
+                  className="rounded-full"
+                  src={userData.user.img}
+                  alt=""
+                />
+              ) : (
+                <UserCircleIcon width="100px" />
+              )}
+
                   <button
                     type="button"
                     className="font-inter text-xs font-bold bg-[#004280] text-white py-1 px-3 rounded-xl hover:bg-white hover:text-[#004280] transition-all duration-300 ease-in-out"

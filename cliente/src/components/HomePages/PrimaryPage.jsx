@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { useAuthStore } from "../../stores/useAuthStore.js";
+import { UserCircleIcon } from "@heroicons/react/20/solid";
 
 export default function PrimaryPage() {
 
@@ -12,6 +13,7 @@ export default function PrimaryPage() {
   const [ chats, setChats ] = useState([]);
   const {isAuth, logout} = useAuthStore();
   const [ friendsData, setFriendsData ] = useState([]);
+  const [ channelsData, setChannelsData ] = useState([]);
 
   const handleInputChange= (e) => {
     const query = e.target.value;
@@ -36,6 +38,12 @@ export default function PrimaryPage() {
       setFriendsData(res.data);
     });
   }, [setFriendsData]);
+
+  useEffect(() => {
+    axios.get("/api/chat/channelsData").then((res) => {
+      setChannelsData(res.data);
+    });
+  }, [setChannelsData]);
 
   if(!isAuth) return <Navigate to="/" />;
 
@@ -85,7 +93,7 @@ export default function PrimaryPage() {
         <h2 className="text-lg md:text-3xl max-md:text-center font-inter font-black mb-4 md:mb-8">Últimos Amigos Agregados</h2>
         <div className="flex flex-wrap justify-center md:justify-start lg:justify-between gap-4 max-w-6xl mx-auto">
           {friendsData.length > 0 ? friendsData.slice(0,5).map(friend => (
-            <Contact key={friend.username} username={friend.username} img={friend.img} friend={true} id={friend.id}/>
+            <Contact key={friend.username} username={friend.username} iconName={friend.img ? undefined : UserCircleIcon} img={friend.img ? friend.img : undefined} friend={true} id={friend.id}/>
           )) : <p>No existen ultimos amgios agregados</p>}
         </div>
       </div>
@@ -93,12 +101,9 @@ export default function PrimaryPage() {
       <div className="mt-14 max-w-7xl">
         <h2 className="text-lg md:text-3xl max-md:text-center font-inter font-black mb-4 md:mb-8">Últimos Canales Seguidos</h2>
         <div className="flex flex-wrap justify-center md:justify-start lg:justify-between gap-4 max-w-6xl mx-auto">
-          <Contact />
-          <Contact />
-          <Contact />
-          <Contact />
-          <Contact />
-          <Contact />
+          {channelsData.length > 0 ? channelsData.slice(0,5).map(channel => (
+            <Contact key={channel.chat_name} username={channel.chat_name} iconNameChannel={channel.img} userInChat={true} id={channel._id}/>
+          )) : <p>No existen ultimos canales seguidos</p>}
         </div>
       </div>
     </div>

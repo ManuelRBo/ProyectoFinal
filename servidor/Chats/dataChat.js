@@ -14,6 +14,7 @@ export default async function dataChat(req, res) {
             res.status(401).json({message: "Unauthorized"})
         }
     } else {
+        return res.json({chat_name: chat.chat_name, img: chat.img, user_id: myUserId})
         res.json(chat)
     }
 }

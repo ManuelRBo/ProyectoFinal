@@ -34,8 +34,8 @@ export default function mainSocket(socket) {
             chat_id = sanitizeInput(chat_id);
             message = sanitizeInput(message);
             const response = await saveMessage(userSockets, user, chat_id, message);
-            console.log('Mensaje enviado');
-            callback({success: true});
+            console.log(response);
+            callback(response);
         }catch(err){
             console.log(err);
             callback({error: 'Internal server error'});

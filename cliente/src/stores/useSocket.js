@@ -6,6 +6,7 @@ const useSocketStore = create((set) => ({
   connectSocket: () => {
     const socket = io('http://localhost:3000',{
       transports: ['websocket'],
+      withCredentials: true,
     });
     socket.on('connect', () => {
       console.log('Usuario conectado');

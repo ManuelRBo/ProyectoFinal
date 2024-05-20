@@ -1,5 +1,6 @@
 import Chat from '../models/Chats.js';
 import Message from '../models/Message.js';
+import User from '../models/User.js';
 import io from '../server.js';
 
 
@@ -35,7 +36,10 @@ export default async function saveMessage(userSockets, user, chat_id, message) {
         await newMessage.save();
 
         const friend = chat.members.find(u => u != user);
-        const friendSocket = userSockets.get(friend.toString());
-        io.to(friendSocket).emit('new-message', {chat_id, message, sender_id: user, time: Date.now()});
-        return newMessage;
+        if(friend){
+            const friendSocket = userSockets.get(friend.toString());
+            io.to(friendSocket).emit('new-message', {chat_id, message, sender_id: user, time: Date.now()});
+        }
+        const sender_user = await User.findById(user);
+        return {success: true, sender_id: user, sender_user: sender_user.username};
 }

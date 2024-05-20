@@ -17,8 +17,9 @@ export default function Chats() {
   const [messages, setMessages] = useState([]);
   const { register, handleSubmit, watch, reset } = useForm();
   const { socket } = useSocketStore();
-  const { setUserData } = useUserDataStore();
+  const { setUserData, userData } = useUserDataStore();
   const endMessage = useRef(null);
+
 
   const scrollToBottom = () => {
     endMessage.current?.scrollIntoView({ behavior: "smooth" });
@@ -50,7 +51,7 @@ export default function Chats() {
           setMessages((prevMessages) => [
             ...prevMessages,
             {
-              sernder_id: chatData.user_id,
+              sender_id: res.sender_id,
               message: data.messageToSend,
               time: Date.now(),
             },
@@ -62,6 +63,7 @@ export default function Chats() {
 
   useEffect(() => {
     socket.on("new-message", (data) => {
+      if (data.chat_id !== id) return;
       setMessages((prevMessage) => [
         ...prevMessage,
         {
@@ -75,7 +77,7 @@ export default function Chats() {
     return () => {
       socket.off("new-message");
     };
-  }, [socket]);
+  }, [socket, id]);
 
   useEffect(() => {
     scrollToBottom();
@@ -92,7 +94,7 @@ export default function Chats() {
             className="w-14 h-14 rounded-full"
           />
         ) : (
-          <Icon icon="vscode-icons:file-type-js-official" width={"55px"} />
+          <Icon icon={chatData.img} width={"55px"} />
         )}
         <h2 className="text-4xl font-bold font-inter">
           {chatData.chat_name || chatData.username}
@@ -111,13 +113,14 @@ export default function Chats() {
               </div>
             ) : (
               messages.map((message, index) =>
-                message.sender_id === chatData.user_id ? (
+                message.sender_id !== userData.user._id ? (
                   <div className="flex justify-start" key={index}>
                     <div className="max-w-[70%] min-w-20 space-y-2">
                       <MessageBox
                         type="received"
                         message={message.message}
                         time={convertirHora(message.time)}
+                        sender = {message.sender_user}
                       />
                     </div>
                   </div>
@@ -128,6 +131,7 @@ export default function Chats() {
                         type="sent"
                         message={message.message}
                         time={convertirHora(message.time)}
+                        sender = {"Tú"}
                       />
                     </div>
                   </div>

@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useUserDataStore } from "../../stores/userUserDataStore";
 import useSocketStore from "../../stores/useSocket";
 import { toast } from "react-toastify";
+import { UserCircleIcon } from "@heroicons/react/24/outline";
 
 export default function Friends({friendsOpen}) {
 
@@ -51,16 +52,16 @@ export default function Friends({friendsOpen}) {
 
       <div className="mt-14 max-w-7xl overflow-auto">
         <h2 className="text-lg md:text-3xl max-md:text-center font-inter font-bold mb-4 md:mb-8">Mis amigos</h2>
-        <form className="mb-5 mx-auto flex gap-5 max-md:w-[80%] max-lg:justify-center">
+        {/* <form className="mb-5 mx-auto flex gap-5 max-md:w-[80%] max-lg:justify-center">
             <input type="text" placeholder="Buscar amigos" className="w-full md:w-1/2 p-2 border border-gray-300 rounded-md" />
             <button className="bg-blue-500 text-white p-2 rounded-md">Buscar</button>
-        </form>
+        </form> */}
         <div className="flex flex-wrap max-lg:justify-center justify-start gap-8 md:gap-14">
         {!userLoading && userFriendsData.length === 0 ? <p className="text-sm md:text-base max-md:text-center font-inter">No tienes amigos</p>:
 
           <div className="flex flex-wrap max-lg:justify-center justify-start gap-8 md:gap-14 ">
           {!userLoading ? userFriendsData.map((user, index) => (
-            <Contact key={index} username={user.username} img={user.img} friend={true} id={user.id}/>
+            <Contact key={index} username={user.username} iconName={user.img ? undefined : UserCircleIcon} img={user.img ? user.img : undefined} friend={true} id={user.id}/>
           )) : <h2 className="text-lg md:text-3xl max-md:text-center font-inter font-bold mb-4 md:mb-8">Cargando...</h2>}
         </div>
         }

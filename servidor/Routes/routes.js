@@ -14,6 +14,7 @@ import createChat from "../Chats/createChat.js";
 import dataChat from "../Chats/dataChat.js";
 import getMessages from "../Chats/getMessages.js";
 import followChat from "../Chats/followChat.js";
+import channelsData from "../Chats/channelsData.js";
 
 const routes = Router();
 
@@ -29,6 +30,7 @@ routes.get("/userData/userRequestData", checkJWT, userRequestData)
 routes.get("/userData/userFriendsData", checkJWT, userFriendsData)
 routes.get("/chat/chatData/:id", checkJWT, dataChat)
 routes.get("/chat/messages/:id", checkJWT, getMessages)
+routes.get("/chat/channelsData", checkJWT, channelsData)
 routes.patch("/userData/acceptFriend", checkJWT, acceptFriend)
 routes.patch("/userData/rejectFriend", checkJWT, rejectFriend)
 

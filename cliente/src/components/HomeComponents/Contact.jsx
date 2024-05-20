@@ -4,15 +4,14 @@ import useSocketStore from "../../stores/useSocket";
 import { toast } from "react-toastify";
 import {useUserDataStore} from "../../stores/userUserDataStore";
 import { useNavigate } from "react-router-dom";
-import { Icon } from "@iconify-icon/react";
+import { UserCircleIcon } from "@heroicons/react/24/outline";
+import {Icon} from "@iconify-icon/react";
 
 
-export default function Contact({ img, iconName, username, friend, id, userInChat }) {
+export default function Contact({ img, iconName, iconNameChannel, username, friend, id, userInChat }) {
   const [hover, setHover] = useState(false);
   const { socket } = useSocketStore();
-  const { setUserRequestData, setUserFriendsData } = useUserDataStore();
-
-  if(img === null) img = "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png";
+  const { setUserRequestData, setUserFriendsData, setUserData } = useUserDataStore();
 
 
   const handleHover = () => {
@@ -67,8 +66,14 @@ export default function Contact({ img, iconName, username, friend, id, userInCha
   const handleFollowChat = () => {
     axios.post("/api/chat/followChat", { id })
     .then(res => {
-        console.log(res.data);
-    })
+        toast.success("Chat seguido");
+        setUserData();
+        navigate(`/home/chat/${res.data.id}`);
+      })
+  }
+
+  const handleGroupChat = () => {
+    navigate(`/home/chat/${id}`);
   }
 
   return (
@@ -78,15 +83,16 @@ export default function Contact({ img, iconName, username, friend, id, userInCha
       onMouseLeave={handleLeave}
     >
       <div className="relative">
-      {iconName && <Icon icon={iconName} width="40px" />}
-        {img && !iconName &&
+      {iconNameChannel && <Icon icon={iconNameChannel} width="50px" />}
+      {iconName && <UserCircleIcon width="50px" />}
+        {img &&
           <img
             src={img}
             alt="icon"
-            width="40px"
+            width="50px"
             className="rounded-full w-10 md:w-16"
           />}
-          {!iconName && <div className="bg-green-500 rounded-full w-3 h-3 md:w-4 md:h-4 absolute right-0 bottom-[0.5px]"></div>}
+          {!iconNameChannel && <div className="bg-green-500 rounded-full w-3 h-3 md:w-4 md:h-4 absolute right-0 bottom-[0.5px]"></div>}
       </div>
       {friend === false && hover ? (
         <p
@@ -115,7 +121,7 @@ export default function Contact({ img, iconName, username, friend, id, userInCha
           Seguir
         </p>
         ) : (
-          <p className="text-xs md:text-sm text-center font-inter bg-[#0085FF] font-semibold w-[110px] text-white rounded-lg p-1 md:p-2 cursor-pointer" onClick={handleChat}>
+          <p className="text-xs md:text-sm text-center font-inter bg-[#0085FF] font-semibold w-[110px] text-white rounded-lg p-1 md:p-2 cursor-pointer" onClick={handleGroupChat}>
           Chat
         </p>
       ) 
