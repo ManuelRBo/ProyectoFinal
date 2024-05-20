@@ -47,9 +47,12 @@ app.use(cors({
   }));
 
   
-
-// Middleware para parsear JSON en las solicitudes entrantes
-app.use(express.json());
+  
+  
+  
+  // Middleware para parsear JSON en las solicitudes entrantes
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
 app.use(routes);
 

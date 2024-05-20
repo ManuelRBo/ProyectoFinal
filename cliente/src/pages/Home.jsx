@@ -19,6 +19,8 @@ import { useUserDataStore } from "../stores/userUserDataStore";
 import capitalizar from "../utils/capitalizar";
 import useSocketStore from "../stores/useSocket";
 import { useAuthStore } from "../stores/useAuthStore";
+import axios from "axios";
+import Resizer from "react-image-file-resizer";
 
 const Friends = lazy(() => import("../components/HomePages/Friends"));
 
@@ -31,6 +33,9 @@ export default function Home() {
   const { logout } = useAuthStore();
   const { socket } = useSocketStore();
   const [newMessage, setNewMessage] = useState([]);
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [fileError, setFileError] = useState(null);
 
   useEffect(() => {
     setUserData();
@@ -38,6 +43,9 @@ export default function Home() {
 
   const close = () => {
     setConfigOpen(false);
+    setFile(null);
+    setPreview(null);
+    setFileError(null);
   };
 
   const handleMenu = () => {
@@ -95,6 +103,63 @@ export default function Home() {
       };
     }
   }, [socket, setUserData, location.pathname]);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.size > 5 * 1024 * 1024) {
+      setFileError("El archivo es demasiado grande. Máximo permitido: 5MB");
+      return;
+    }
+    setFileError(null);
+    resizeFile(file);
+  };
+
+  const resizeFile = (file) => {
+    Resizer.imageFileResizer(
+      file,
+      500,
+      500,
+      "JPEG",
+      100,
+      0,
+      (uri) => {
+        setFile(uri);
+        setPreview(URL.createObjectURL(uri));
+      },
+      "blob"
+    );
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    if (file) {
+      formData.append("img", file);
+    }
+    const name = e.target["username"].value;
+    if(name === ""){
+      setFileError("El nombre de usuario no puede estar vacío");
+      toast.error("El nombre de usuario no puede estar vacío");
+      return;
+    }
+    formData.append("username", name);
+    axios.post("/api/update", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }).then((res) => {
+      if (res.data.success) {
+        setUserData();
+        setConfigOpen(false);
+        setFile(null);
+        setPreview(null);
+        setFileError(null);
+        toast.success("Perfil actualizado correctamente");
+      } else {
+        toast.error("Error al actualizar el perfil");
+      }
+    });
+  };
 
   if (userLoading) {
     return <div>Loading...</div>;
@@ -350,16 +415,17 @@ export default function Home() {
             style={{ maxWidth: "600px", width: "90%" }}
           >
             <Dialog.Panel className="relative z-20 bg-white rounded-md shadow-lg mx-auto px-5 py-12">
-              <form className="flex flex-col items-center gap-10 w-full">
+              <form className="flex flex-col items-center gap-7 w-full" onSubmit={handleSubmit}>
                 <h2 className="text-center font-bold font-inter text-4xl">
                   Perfil
                 </h2>
                 <div className="flex flex-col gap-3 items-center">
-              {userData.user.img ? (
+              {userData.user.img || preview ? (
                 <img
                   className="rounded-full"
-                  src={userData.user.img}
+                  src={userData.user.img ? userData.user.img : preview}
                   alt=""
+                  width="100px"
                 />
               ) : (
                 <UserCircleIcon width="100px" />
@@ -368,9 +434,12 @@ export default function Home() {
                   <button
                     type="button"
                     className="font-inter text-xs font-bold bg-[#004280] text-white py-1 px-3 rounded-xl hover:bg-white hover:text-[#004280] transition-all duration-300 ease-in-out"
+                    onClick={() => { document.getElementById("fileInput").click() }}
                   >
                     Cambiar foto de perfil
                   </button>
+                  {fileError && (<p className="text-red-600">{fileError}</p>)}
+                  <input type="file" id="fileInput" onChange={handleFileChange} value={userData.user.img && userData.user.img} className="hidden" />
                 </div>
                 <div className="flex flex-col gap-3 items-center w-full">
                   <label
@@ -383,10 +452,13 @@ export default function Home() {
                     className="border-2 border-[#004280] py-1 px-3 rounded-xl w-[80%]"
                     type="text"
                     id="name"
+                    name="username"
+                    defaultValue={userData.user.username}
+                    onChange={(e) => e.target.value === "" ? setFileError("El nombre de usuario no puede estar vacío") : setFileError(null)}
                   />
                 </div>
 
-                <div className="flex flex-col gap-3 items-center w-full">
+                {/* <div className="flex flex-col gap-3 items-center w-full">
                   <label
                     className="font-inter text-base font-bold"
                     htmlFor="email"
@@ -412,11 +484,11 @@ export default function Home() {
                     type="password"
                     id="password"
                   />
-                </div>
+                </div> */}
 
                 <button
-                  className="w-[60%] font-inter text-base font-bold bg-[#004280] text-white py-3 px-3 rounded-xl hover:bg-white hover:text-[#004280] transition-all duration-300 ease-in-out"
-                  type="submit"
+                  className="w-[60%] font-inter text-base font-bold bg-[#004280] text-white py-3 px-3 rounded-xl hover:bg-white hover:text-[#004280] transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+                  type="submit" disabled={fileError ? true : false}
                 >
                   Guardar Cambios
                 </button>
