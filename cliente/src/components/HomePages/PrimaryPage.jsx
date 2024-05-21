@@ -73,14 +73,14 @@ export default function PrimaryPage() {
               <h3 className="text-2xl font-bold font-inter mb-2">Usuarios</h3>
               <div className="grid grid-cols-1 xl:grid-cols-3 2xl:grid-cols-4 gap-y-5">
               {users.length > 0 ? users.map(user => (
-                <Contact key={user.username} username={user.username} img={user.img} friend={user.friend} id={user.id}/>
+                <Contact key={user.username} username={user.username} iconName={user.img ? undefined : UserCircleIcon} img={user.img ? user.img : undefined} friend={user.friend} id={user.id}/>
               )) : <p>No hay resultados</p>}
               </div>
             </div>
             <div>
               <h3 className="text-2xl font-bold font-inter mb-2">Chats</h3>
               {chats.length > 0 ? chats.map(chat => (
-                <Contact key={chat.id} username={chat.chat_name} iconName={chat.img} userInChat={chat.userInChat} id={chat.id} />
+                <Contact key={chat.id} username={chat.chat_name} iconNameChannel={chat.img} userInChat={chat.userInChat} id={chat.id} />
               )) : <p>No hay resultados</p>}
             </div>
             </>
