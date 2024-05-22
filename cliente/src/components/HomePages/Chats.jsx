@@ -20,7 +20,6 @@ export default function Chats() {
   const { setUserData, userData } = useUserDataStore();
   const endMessage = useRef(null);
 
-
   const scrollToBottom = () => {
     endMessage.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -83,18 +82,19 @@ export default function Chats() {
     scrollToBottom();
   }, [messages]);
 
-
   return (
     <div className="flex flex-col gap-5 justify-between pb-4 h-full max-md:h-[calc(100%-80px)]">
       <div className="flex items-center max-md:justify-center gap-5 border-b-2 border-gray-200 pb-3 ml-5">
-        {!chatData.img ? (
+        {chatData.img && chatData.type === "private" ? (
           <img
-            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+            src={`/api/public/images/userData/${chatData.img}?t=${Date.now()}`}
             alt="Chat"
-            className="w-14 h-14 rounded-full"
+            className="w-14 rounded-full"
           />
-        ) : (
+        ) : chatData.img && chatData.type === "group" ? (
           <Icon icon={chatData.img} width={"55px"} />
+        ) : !chatData.img && chatData.type === "private" && (
+          <Icon icon="akar-icons:user" width="55px" />
         )}
         <h2 className="text-4xl font-bold font-inter">
           {chatData.chat_name || chatData.username}
@@ -120,7 +120,7 @@ export default function Chats() {
                         type="received"
                         message={message.message}
                         time={convertirHora(message.time)}
-                        sender = {message.sender_user}
+                        sender={message.sender_user}
                       />
                     </div>
                   </div>
@@ -131,7 +131,7 @@ export default function Chats() {
                         type="sent"
                         message={message.message}
                         time={convertirHora(message.time)}
-                        sender = {"Tú"}
+                        sender={"Tú"}
                       />
                     </div>
                   </div>

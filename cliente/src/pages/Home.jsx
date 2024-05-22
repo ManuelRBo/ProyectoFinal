@@ -91,10 +91,7 @@ export default function Home() {
 
         if (location.pathname != "/home/chat/" + res.chat_id) {
           toast.info("Tienes un nuevo mensaje");
-          setNewMessage((prev) =>[
-            ...prev,
-            {chat_id: res.chat_id}
-          ])
+          setNewMessage((prev) => [...prev, { chat_id: res.chat_id }]);
         }
       });
       return () => {
@@ -137,28 +134,36 @@ export default function Home() {
       formData.append("img", file);
     }
     const name = e.target["username"].value;
-    if(name === ""){
+    if (name === "") {
       setFileError("El nombre de usuario no puede estar vacío");
       toast.error("El nombre de usuario no puede estar vacío");
       return;
     }
     formData.append("username", name);
-    axios.post("/api/update", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }).then((res) => {
-      if (res.data.success) {
+    axios
+      .post("/api/update", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          setUserData();
+          setConfigOpen(false);
+          setFile(null);
+          setPreview(null);
+          setFileError(null);
+          toast.success(res.data.message);
+        }
+      })
+      .catch((err) => {
+        toast.info(err.response.data.error);
         setUserData();
         setConfigOpen(false);
         setFile(null);
         setPreview(null);
         setFileError(null);
-        toast.success("Perfil actualizado correctamente");
-      } else {
-        toast.error("Error al actualizar el perfil");
-      }
-    });
+      });
   };
 
   if (userLoading) {
@@ -325,17 +330,17 @@ export default function Home() {
                 className="py-2 w-full cursor-pointer"
                 onClick={() => {
                   navigate("/home/chat/" + chat.chat._id);
-                  setNewMessage(newMessage.filter((message) => message.chat_id !== chat.chat._id))
+                  setNewMessage(
+                    newMessage.filter(
+                      (message) => message.chat_id !== chat.chat._id
+                    )
+                  );
                 }}
               >
                 <Messages
                   iconLogo={chat.type === "group" ? chat.chat.img : undefined}
                   Icon={chat.type === "private" ? UserCircleIcon : undefined}
-                  imgSrc={
-                    chat.type === "private"
-                      ? chat.chat.img
-                      : undefined
-                  }
+                  imgSrc={chat.type === "private" ? chat.friend.img : undefined}
                   name={
                     menuExpanded
                       ? chat.type === "private"
@@ -350,7 +355,13 @@ export default function Home() {
                         : ""
                       : ""
                   }
-                  newMessage={newMessage.find((message) => message.chat_id === chat.chat._id) ? true : false}
+                  newMessage={
+                    newMessage.find(
+                      (message) => message.chat_id === chat.chat._id
+                    )
+                      ? true
+                      : false
+                  }
                 />
               </div>
             ))}
@@ -415,31 +426,48 @@ export default function Home() {
             style={{ maxWidth: "600px", width: "90%" }}
           >
             <Dialog.Panel className="relative z-20 bg-white rounded-md shadow-lg mx-auto px-5 py-12">
-              <form className="flex flex-col items-center gap-7 w-full" onSubmit={handleSubmit}>
+              <form
+                className="flex flex-col items-center gap-7 w-full"
+                onSubmit={handleSubmit}
+              >
                 <h2 className="text-center font-bold font-inter text-4xl">
                   Perfil
                 </h2>
                 <div className="flex flex-col gap-3 items-center">
-              {userData.user.img || preview ? (
-                <img
-                  className="rounded-full"
-                  src={userData.user.img ? userData.user.img : preview}
-                  alt=""
-                  width="100px"
-                />
-              ) : (
-                <UserCircleIcon width="100px" />
-              )}
+                  {preview ? (
+                    <img
+                      className="rounded-full"
+                      src={preview}
+                      alt=""
+                      width="100px"
+                    />
+                  ) : userData.user.img ? (
+                    <img
+                      className="rounded-full"
+                      src={"/api/public/images/userData/" + userData.user.img + "?t=" + Date.now()}
+                      alt=""
+                      width="100px"
+                    />
+                  ) : (
+                    <UserCircleIcon width="100px" />
+                  )}
 
                   <button
                     type="button"
                     className="font-inter text-xs font-bold bg-[#004280] text-white py-1 px-3 rounded-xl hover:bg-white hover:text-[#004280] transition-all duration-300 ease-in-out"
-                    onClick={() => { document.getElementById("fileInput").click() }}
+                    onClick={() => {
+                      document.getElementById("fileInput").click();
+                    }}
                   >
                     Cambiar foto de perfil
                   </button>
-                  {fileError && (<p className="text-red-600">{fileError}</p>)}
-                  <input type="file" id="fileInput" onChange={handleFileChange} value={userData.user.img && userData.user.img} className="hidden" />
+                  {fileError && <p className="text-red-600">{fileError}</p>}
+                  <input
+                    type="file"
+                    id="fileInput"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
                 </div>
                 <div className="flex flex-col gap-3 items-center w-full">
                   <label
@@ -454,7 +482,13 @@ export default function Home() {
                     id="name"
                     name="username"
                     defaultValue={userData.user.username}
-                    onChange={(e) => e.target.value === "" ? setFileError("El nombre de usuario no puede estar vacío") : setFileError(null)}
+                    onChange={(e) =>
+                      e.target.value === ""
+                        ? setFileError(
+                            "El nombre de usuario no puede estar vacío"
+                          )
+                        : setFileError(null)
+                    }
                   />
                 </div>
 
@@ -488,7 +522,8 @@ export default function Home() {
 
                 <button
                   className="w-[60%] font-inter text-base font-bold bg-[#004280] text-white py-3 px-3 rounded-xl hover:bg-white hover:text-[#004280] transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
-                  type="submit" disabled={fileError ? true : false}
+                  type="submit"
+                  disabled={fileError ? true : false}
                 >
                   Guardar Cambios
                 </button>

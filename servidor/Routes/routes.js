@@ -19,7 +19,6 @@ import update from "../UserData/update.js";
 
 const routes = Router();
 
-
 routes.post("/auth/register", registerValidator, register);
 routes.post("/auth/login", loginValidator, login);
 routes.post("/auth/logout", checkJWT, logout);

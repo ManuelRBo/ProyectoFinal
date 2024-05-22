@@ -21,22 +21,24 @@ export default async function update(req, res) {
         const { username } = req.body;
         const {img} = req.files;
 
-        if (username === req.user.username) {
+        if (username === req.user.username && !img) {
             return res.status(400).json({ error: "No hay cambios que realizar" });
         }
 
         if(username && img) {
-            await User.updateOne({ _id: req.user.id }, { username, img: "/images/userData/" + req.user.id + ".jpg" }, (err) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).json({ error: "Error al actualizar los datos" });
-                }
-                res.json({ message: "Datos actualizados", success: true });
-            });
+            await User.updateOne({ _id: req.user.id }, { username });
+            await User.updateOne({ _id: req.user.id }, { img: req.user.id + ".jpg"});
+            return res.status(200).json({ message: "Usuario e imagen actualizados correctamente" });
         }
 
-        if (username) {
-            
+        if(username) {
+            await User.updateOne({ _id: req.user.id }, { username });
+            return res.status(200).json({ message: "Usuario actualizado correctamente" });
+        }
+
+        if(img) {
+            await User.updateOne({ _id: req.user.id }, { img: req.user.id + ".jpg"});
+            return res.status(200).json({ message: "Imagen actualizada correctamente" });
         }
     });
 }

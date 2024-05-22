@@ -87,7 +87,7 @@ export default function Contact({ img, iconName, iconNameChannel, username, frie
       {iconName && <UserCircleIcon width="50px" />}
         {img &&
           <img
-            src={img}
+            src={`/api/public/images/userData/${img}?t=${Date.now()}`}
             alt="icon"
             width="50px"
             className="rounded-full w-10 md:w-16"
