@@ -86,6 +86,11 @@ export default function Home() {
         toast.info("Tienes una nueva solicitud de amistad");
       });
 
+      socket.on("friendRequestAccepted", (res) => {
+        setUserData();
+        toast.success("Solicitud de amistad aceptada");
+      });
+
       socket.on("new-message", (res) => {
         setUserData();
 
@@ -164,6 +169,17 @@ export default function Home() {
         setPreview(null);
         setFileError(null);
       });
+  };
+
+  const handleDeleteAccount = () => {
+    axios.delete("/api/delete")
+    .then(() => {
+      toast.success("Cuenta eliminada correctamente");
+      logout();
+    })
+    .catch(err => {
+      toast.error("Error al eliminar cuenta");
+    })
   };
 
   if (userLoading) {
@@ -323,7 +339,7 @@ export default function Home() {
               </div>
             )}
           </div>
-          {userData.combinedChats.length > 0 &&
+          {userData.combinedChats.length > 0 ? (
             userData.combinedChats.map((chat) => (
               <div
                 key={chat.chat._id}
@@ -364,7 +380,10 @@ export default function Home() {
                   }
                 />
               </div>
-            ))}
+            ))
+          ) : menuExpanded && (
+            <p className="text-center w-3/4">No hay chats</p>
+          )}
 
           {/* <div>
             <Messages
@@ -531,6 +550,7 @@ export default function Home() {
                 <button
                   className="w-[60%] font-inter text-base font-bold bg-red-700 text-white py-3 px-3 rounded-xl hover:bg-white hover:text-red-500 transition-all duration-300 ease-in-out"
                   type="button"
+                  onClick={handleDeleteAccount}
                 >
                   Eliminar Cuenta
                 </button>

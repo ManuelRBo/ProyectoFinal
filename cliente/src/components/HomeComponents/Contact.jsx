@@ -23,6 +23,7 @@ export default function Contact({ img, iconName, iconNameChannel, username, frie
   };
 
   const handleAddFriend = () => {
+    console.log("Añadir amigo");
     socket.emit("addFriend", { id }, (res) => {
       if (res.error) return toast.error(res.error);
       toast.success("Solicitud de amistad enviada");

@@ -4,6 +4,7 @@ import io from '../server.js'
 
 export default async function addFriend(userSockets, myUser, userIDFriend) {
     const userToSend = userSockets.get(userIDFriend);
+    console.log(userToSend);
 
     try{
         if(!mongoose.Types.ObjectId.isValid(userIDFriend)) return {error: 'Invalid user ID'};

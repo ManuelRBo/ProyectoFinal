@@ -1,6 +1,5 @@
 import Chat  from '../models/Chats.js';
 import User from '../models/User.js';
-import { Types } from 'mongoose';
 
 export default async function followChat(req, res) {
     const user_id = req.user.id

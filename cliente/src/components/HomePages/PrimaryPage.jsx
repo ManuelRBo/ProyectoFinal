@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { useAuthStore } from "../../stores/useAuthStore.js";
 import { UserCircleIcon } from "@heroicons/react/20/solid";
+import useSocketStore  from "../../stores/useSocket.js";
 
 export default function PrimaryPage() {
 
@@ -14,6 +15,7 @@ export default function PrimaryPage() {
   const {isAuth, logout} = useAuthStore();
   const [ friendsData, setFriendsData ] = useState([]);
   const [ channelsData, setChannelsData ] = useState([]);
+  const { socket } = useSocketStore();
 
   const handleInputChange= (e) => {
     const query = e.target.value;
@@ -44,6 +46,18 @@ export default function PrimaryPage() {
       setChannelsData(res.data);
     });
   }, [setChannelsData]);
+
+  useEffect(() => {
+    socket.on("friendRequestAccepted", () => {
+      axios.get("/api/userData/userFriendsData").then((res) => {
+        setFriendsData(res.data);
+      });
+      axios.get('/api/searchUsers', { params: { query } })
+      .then(res => {
+        setUsers(res.data.users);
+      })
+    });
+  }, [setFriendsData, socket ,query]);
 
   if(!isAuth) return <Navigate to="/" />;
 

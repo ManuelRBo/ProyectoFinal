@@ -68,8 +68,6 @@ export default async function register(req, res) {
       const token = jwt.sign(payload, "prueba", { expiresIn: "1h" });
       res.cookie("token", token, {
         httpOnly: true,
-        secure: true,
-        sameSite: "strict",
       });
       res.status(201).json({ message: "Usuario registrado correctamente" });
     } catch (error) {

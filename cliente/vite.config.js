@@ -8,7 +8,6 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://localhost:3000', // Ruta del servidor Express
-        changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''), // Elimina /api de la ruta
       },
     },

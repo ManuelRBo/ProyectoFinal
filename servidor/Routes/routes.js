@@ -16,6 +16,7 @@ import getMessages from "../Chats/getMessages.js";
 import followChat from "../Chats/followChat.js";
 import channelsData from "../Chats/channelsData.js";
 import update from "../UserData/update.js";
+import deleteAccount from "../Auth/deleteAccount.js";
 
 const routes = Router();
 
@@ -35,5 +36,6 @@ routes.get("/chat/messages/:id", checkJWT, getMessages);
 routes.get("/chat/channelsData", checkJWT, channelsData);
 routes.patch("/userData/acceptFriend", checkJWT, acceptFriend);
 routes.patch("/userData/rejectFriend", checkJWT, rejectFriend);
+routes.delete("/delete", checkJWT, deleteAccount)
 
 export default routes;

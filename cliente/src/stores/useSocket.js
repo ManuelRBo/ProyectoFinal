@@ -4,8 +4,7 @@ import io from 'socket.io-client';
 const useSocketStore = create((set) => ({
   socket: null,
   connectSocket: () => {
-    const socket = io('http://localhost:3000',{
-      transports: ['websocket'],
+    const socket = io('http://localhost:3000', {
       withCredentials: true,
     });
     socket.on('connect', () => {
