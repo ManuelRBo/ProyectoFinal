@@ -17,7 +17,7 @@ const server = http.createServer(app);
 // Configura el servidor de Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "http://192.168.1.165:5173",
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
@@ -29,7 +29,7 @@ export default io;
 // Middleware para permitir CORS
 app.use(
   cors({
-    origin: "http://localhost:5173", // Ajusta según necesidad
+    origin: "http://192.168.1.165:5173", // Ajusta según necesidad
     methods: ["GET", "POST"], // Métodos permitidos
     allowedHeaders: ["Content-Type", "Authorization"],
   })

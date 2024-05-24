@@ -35,8 +35,8 @@ export default async function saveMessage(userSockets, user, chat_id, message) {
         
         await newMessage.save();
 
-        const friend = chat.members.find(u => u != user);
-        if(friend){
+        const friends = chat.members.filter(u => u != user);
+        for(const friend of friends){
             const friendSocket = userSockets.get(friend.toString());
             io.to(friendSocket).emit('new-message', {chat_id, message, sender_id: user, time: Date.now()});
         }
