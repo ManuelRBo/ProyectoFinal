@@ -75,7 +75,7 @@ export default function Chats() {
         },
       ]);
     });
-    return () => socket.off("new-message");
+    // return () => socket.off("new-message");
   }, [socket, id, setUserData]);
 
   useEffect(() => {

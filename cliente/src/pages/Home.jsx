@@ -106,6 +106,7 @@ export default function Home() {
       });
 
       return () => {
+        socket.off("new-message");
         socket.off("connected");
         socket.off("friendRequestAccepted");
         socket.off("friendRequest");

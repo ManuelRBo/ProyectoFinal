@@ -90,8 +90,7 @@ export default function Contact({ img, iconName, iconNameChannel, username, frie
           <img
             src={`/api/public/images/userData/${img}?t=${Date.now()}`}
             alt="icon"
-            width="50px"
-            className="rounded-full w-10 md:w-16"
+            className="rounded-full w-10 h-10 object-cover md:w-14 md:h-14"
           />}
           {!iconNameChannel && <div className="bg-green-500 rounded-full w-3 h-3 md:w-4 md:h-4 absolute right-0 bottom-[0.5px]"></div>}
       </div>
