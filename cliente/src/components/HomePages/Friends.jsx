@@ -25,7 +25,7 @@ export default function Friends({friendsOpen}) {
   
     // Función de limpieza
     return () => {
-      socket.off("friendRequestAccepted", handleFriendRequestAccepted);
+      // socket.off("friendRequestAccepted", handleFriendRequestAccepted);
     };
   }, [socket, setUserFriendsData]);
 
@@ -42,7 +42,7 @@ export default function Friends({friendsOpen}) {
           <>
           <div className="flex flex-wrap max-lg:justify-center justify-start gap-8 md:gap-14 max-w-6xl mx-auto">
           {!userLoading ? userRequestData.map((user, index) => (
-            <Contact key={index} username={user.username} img={user.img} friend={"pendiente"} id={user.id}/>
+            <Contact key={index} username={user.username} iconName={user.img ? undefined : UserCircleIcon} img={user.img ? user.img : undefined} friend={"pendiente"} id={user.id}/>
           )) : <h2 className="text-lg md:text-3xl max-md:text-center font-inter font-bold mb-4 md:mb-8">Cargando...</h2>}
         </div>
           </>

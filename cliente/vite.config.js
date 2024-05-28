@@ -7,10 +7,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://192.168.1.165:3000', // Ruta del servidor Express
+        target: 'http://192.168.1.75:3000', // Ruta del servidor Express
         rewrite: (path) => path.replace(/^\/api/, ''), // Elimina /api de la ruta
       },
     },
   },
-  
 });

@@ -99,9 +99,16 @@ export default function Home() {
           setNewMessage((prev) => [...prev, { chat_id: res.chat_id }]);
         }
       });
+
+      socket.on("connected", (res) => {
+        setUserData();
+        toast.info(res.username + " se ha conectado");
+      });
+
       return () => {
+        socket.off("connected");
+        socket.off("friendRequestAccepted");
         socket.off("friendRequest");
-        socket.off("new-message");
       };
     }
   }, [socket, setUserData, location.pathname]);

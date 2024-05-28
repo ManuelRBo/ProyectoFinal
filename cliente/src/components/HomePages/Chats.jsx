@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
+import { PaperAirplaneIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { PaperAirplaneIcon as SendHover } from "@heroicons/react/24/solid";
 import { Icon } from "@iconify-icon/react";
 import { useParams } from "react-router-dom";
@@ -63,20 +63,20 @@ export default function Chats() {
   useEffect(() => {
     socket.on("new-message", (data) => {
       if (data.chat_id !== id) return;
+      console.log(data);
+      setUserData();
       setMessages((prevMessage) => [
         ...prevMessage,
         {
           sender_id: data.sender_id,
+          sender_user: data.sender_user,
           message: data.message,
           time: data.time,
         },
       ]);
     });
-
-    return () => {
-      socket.off("new-message");
-    };
-  }, [socket, id]);
+    return () => socket.off("new-message");
+  }, [socket, id, setUserData]);
 
   useEffect(() => {
     scrollToBottom();
@@ -94,7 +94,7 @@ export default function Chats() {
         ) : chatData.img && chatData.type === "group" ? (
           <Icon icon={chatData.img} width={"55px"} />
         ) : !chatData.img && chatData.type === "private" && (
-          <Icon icon="akar-icons:user" width="55px" />
+          <UserCircleIcon width="55px" />
         )}
         <h2 className="text-4xl font-bold font-inter">
           {chatData.chat_name || chatData.username}

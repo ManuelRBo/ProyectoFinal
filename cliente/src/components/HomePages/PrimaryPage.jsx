@@ -57,6 +57,7 @@ export default function PrimaryPage() {
         setUsers(res.data.users);
       })
     });
+    // return () => socket.off("friendRequestAccepted");
   }, [setFriendsData, socket ,query]);
 
   if(!isAuth) return <Navigate to="/" />;
