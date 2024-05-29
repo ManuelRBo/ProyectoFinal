@@ -1,4 +1,4 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model, Types, connect } from "mongoose";
 
 
 const userSchema = new Schema({
@@ -23,6 +23,7 @@ const userSchema = new Schema({
             _id: false,
         },
     ],
+    connected: { type: Boolean, required: false, default: false },
 });
 
 const User = model("User", userSchema);

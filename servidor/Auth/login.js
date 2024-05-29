@@ -2,6 +2,8 @@ import User from '../models/User.js';
 import { body, validationResult } from "express-validator";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import { userSockets } from '../Sockets/mainSocket.js';
+import io from '../server.js';
 
 export const loginValidator = [
     body('user_email').isString().withMessage('El email debe ser un string'),
@@ -32,7 +34,21 @@ export default async function login(req, res) {
             id: user.id,
             username: user.username,
         }
+        user.connected = true;
+        await user.save();
         const token = jwt.sign(payload, "prueba", {expiresIn: '1d'});
+
+        try {
+            const friends = await User.findById(user.id).populate('friends.user', 'username');
+            for (const friend of friends.friends) {
+                console.log(friend.user.username);
+                io.to(userSockets.get(friend.user._id.toString())).emit('connected', { username: friends.username });
+            }
+        } catch (err) {
+            console.log(err);
+            return { error: 'Internal server error' };
+        }
+        
         res.cookie('token', token, {httpOnly:true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)});
         return res.status(200).json({message: 'Usuario autenticado correctamente'});
     }catch(error){

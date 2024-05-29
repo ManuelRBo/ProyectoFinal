@@ -235,7 +235,10 @@ export default function Home() {
             <MenuOption
               Icon={ArrowLeftStartOnRectangleIcon}
               text={menuExpanded ? "Cerrar Sesión" : ""}
-              onClick={() => logout()}
+              onClick={() => {
+                disconnectSocket();
+                logout();
+              }}
             />
           </div>
           <hr className={`border-t border-gray-300 w-full`} />

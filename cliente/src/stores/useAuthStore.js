@@ -7,5 +7,6 @@ export const useAuthStore = create((set) => ({
     logout: async () => {
         await axios.post('/api/auth/logout');
         set({ isAuth: false });
+        window.location.href = '/';
     }
 }));
