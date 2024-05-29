@@ -106,7 +106,7 @@ export default function Chats() {
             <img
               src={`/api/public/images/userData/${chatData.img}?t=${Date.now()}`}
               alt="Chat"
-              className="w-14 rounded-full"
+              className="w-14 rounded-full h-14 object-cover"
             />
           ) : chatData.img && chatData.type === "group" ? (
             <Icon icon={chatData.img} width={"55px"} />
