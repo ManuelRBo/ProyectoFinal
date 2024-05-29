@@ -22,12 +22,21 @@ export default function Friends({friendsOpen}) {
     };
   
     socket.on("friendRequestAccepted", handleFriendRequestAccepted);
+    socket.on("connected", () =>{
+      setUserFriendsData();
+      setUserRequestData();
+    })
+
+    socket.on("friend-logout", () =>{
+      setUserFriendsData();
+      setUserRequestData();
+    })
   
     // Función de limpieza
     return () => {
       // socket.off("friendRequestAccepted", handleFriendRequestAccepted);
     };
-  }, [socket, setUserFriendsData]);
+  }, [socket, setUserFriendsData, setUserRequestData]);
 
 
   return (
@@ -42,7 +51,7 @@ export default function Friends({friendsOpen}) {
           <>
           <div className="flex flex-wrap max-lg:justify-center justify-start gap-8 md:gap-14 max-w-6xl mx-auto">
           {!userLoading ? userRequestData.map((user, index) => (
-            <Contact key={index} username={user.username} iconName={user.img ? undefined : UserCircleIcon} img={user.img ? user.img : undefined} friend={"pendiente"} id={user.id}/>
+            <Contact key={index} username={user.username} iconName={user.img ? undefined : UserCircleIcon} img={user.img ? user.img : undefined} friend={"pendiente"} connected={user.connected} id={user.id}/>
           )) : <h2 className="text-lg md:text-3xl max-md:text-center font-inter font-bold mb-4 md:mb-8">Cargando...</h2>}
         </div>
           </>
@@ -61,7 +70,7 @@ export default function Friends({friendsOpen}) {
 
           <div className="flex flex-wrap max-lg:justify-center justify-start gap-8 md:gap-14 ">
           {!userLoading ? userFriendsData.map((user, index) => (
-            <Contact key={index} username={user.username} iconName={user.img ? undefined : UserCircleIcon} img={user.img ? user.img : undefined} friend={true} id={user.id}/>
+            <Contact key={index} username={user.username} iconName={user.img ? undefined : UserCircleIcon} img={user.img ? user.img : undefined} connected={user.connected} friend={true} id={user.id}/>
           )) : <h2 className="text-lg md:text-3xl max-md:text-center font-inter font-bold mb-4 md:mb-8">Cargando...</h2>}
         </div>
         }

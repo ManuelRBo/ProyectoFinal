@@ -12,7 +12,7 @@ export default function mainSocket(socket) {
     const user = jwt.decode(token).id;
     userSockets.set(user, socket.id);  
     console.log(userSockets);
-    // connected(userSockets, user, socket);
+    connected(userSockets, user, socket);
 
     socket.on('disconnect', () => {
         userSockets.delete(user);

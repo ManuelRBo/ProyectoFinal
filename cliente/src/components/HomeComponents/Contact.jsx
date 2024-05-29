@@ -8,7 +8,7 @@ import { UserCircleIcon } from "@heroicons/react/24/outline";
 import {Icon} from "@iconify-icon/react";
 
 
-export default function Contact({ img, iconName, iconNameChannel, username, friend, id, userInChat }) {
+export default function Contact({ img, iconName, iconNameChannel, username, friend, id, userInChat, connected }) {
   const [hover, setHover] = useState(false);
   const { socket } = useSocketStore();
   const { setUserRequestData, setUserFriendsData, setUserData } = useUserDataStore();
@@ -92,7 +92,7 @@ export default function Contact({ img, iconName, iconNameChannel, username, frie
             alt="icon"
             className="rounded-full w-10 h-10 object-cover md:w-14 md:h-14"
           />}
-          {!iconNameChannel && <div className="bg-green-500 rounded-full w-3 h-3 md:w-4 md:h-4 absolute right-0 bottom-[0.5px]"></div>}
+          {!iconNameChannel && <div className={`${connected ? "bg-green-500" : "bg-red-500"} rounded-full w-3 h-3 md:w-4 md:h-4 absolute right-1 bottom-[2px]`}></div>}
       </div>
       {friend === false && hover ? (
         <p

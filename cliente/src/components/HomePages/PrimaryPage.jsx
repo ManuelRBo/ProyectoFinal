@@ -52,11 +52,23 @@ export default function PrimaryPage() {
       axios.get("/api/userData/userFriendsData").then((res) => {
         setFriendsData(res.data);
       });
+    });
       axios.get('/api/searchUsers', { params: { query } })
       .then(res => {
         setUsers(res.data.users);
-      })
-    });
+      });
+      
+      socket.on("connected", () => {
+        axios.get("/api/userData/userFriendsData").then((res) => {
+          setFriendsData(res.data);
+        });
+
+        socket.on("friend-logout", () => {
+          axios.get("/api/userData/userFriendsData").then((res) => {
+            setFriendsData(res.data);
+          });
+        });
+      });
     // return () => socket.off("friendRequestAccepted");
   }, [setFriendsData, socket ,query]);
 
@@ -88,7 +100,7 @@ export default function PrimaryPage() {
               <h3 className="text-2xl font-bold font-inter mb-2">Usuarios</h3>
               <div className="grid grid-cols-1 xl:grid-cols-3 2xl:grid-cols-4 gap-y-5">
               {users.length > 0 ? users.map(user => (
-                <Contact key={user.username} username={user.username} iconName={user.img ? undefined : UserCircleIcon} img={user.img ? user.img : undefined} friend={user.friend} id={user.id}/>
+                <Contact key={user.username} username={user.username} iconName={user.img ? undefined : UserCircleIcon} img={user.img ? user.img : undefined} friend={user.friend} connected={user.connected} id={user.id}/>
               )) : <p>No hay resultados</p>}
               </div>
             </div>
@@ -108,7 +120,7 @@ export default function PrimaryPage() {
         <h2 className="text-lg md:text-3xl max-md:text-center font-inter font-black mb-4 md:mb-8">Últimos Amigos Agregados</h2>
         <div className="flex flex-wrap justify-center md:justify-start lg:justify-between gap-4 max-w-6xl mx-auto">
           {friendsData.length > 0 ? friendsData.slice(0,5).map(friend => (
-            <Contact key={friend.username} username={friend.username} iconName={friend.img ? undefined : UserCircleIcon} img={friend.img ? friend.img : undefined} friend={true} id={friend.id}/>
+            <Contact key={friend.username} username={friend.username} iconName={friend.img ? undefined : UserCircleIcon} img={friend.img ? friend.img : undefined} friend={true} connected={friend.connected} id={friend.id}/>
           )) : <p>No existen ultimos amgios agregados</p>}
         </div>
       </div>

@@ -75,6 +75,22 @@ export default function Chats() {
         },
       ]);
     });
+
+    socket.on("connected", () => {
+      axios
+      .get("/api/chat/chatData/" + id)
+      .then((res) => {
+        setChatData(res.data);
+      })
+    });
+
+    socket.on("friend-logout", () => {
+      axios
+      .get("/api/chat/chatData/" + id)
+      .then((res) => {
+        setChatData(res.data);
+      })
+    });
     // return () => socket.off("new-message");
   }, [socket, id, setUserData]);
 
@@ -85,17 +101,26 @@ export default function Chats() {
   return (
     <div className="flex flex-col gap-5 justify-between pb-4 h-full max-md:h-[calc(100%-80px)]">
       <div className="flex items-center max-md:justify-center gap-5 border-b-2 border-gray-200 pb-3 ml-5">
-        {chatData.img && chatData.type === "private" ? (
-          <img
-            src={`/api/public/images/userData/${chatData.img}?t=${Date.now()}`}
-            alt="Chat"
-            className="w-14 rounded-full"
-          />
-        ) : chatData.img && chatData.type === "group" ? (
-          <Icon icon={chatData.img} width={"55px"} />
-        ) : !chatData.img && chatData.type === "private" && (
-          <UserCircleIcon width="55px" />
-        )}
+        <div className="relative">
+          {chatData.img && chatData.type === "private" ? (
+            <img
+              src={`/api/public/images/userData/${chatData.img}?t=${Date.now()}`}
+              alt="Chat"
+              className="w-14 rounded-full"
+            />
+          ) : chatData.img && chatData.type === "group" ? (
+            <Icon icon={chatData.img} width={"55px"} />
+          ) : !chatData.img && chatData.type === "private" && (
+            <UserCircleIcon width="55px" />
+          )}
+          {chatData.type === "private" && (
+            <div
+              className={`absolute bottom-0 right-0 w-5 h-5 rounded-full border-2 border-white bg-${
+                chatData.connected ? "green" : "red"
+              }-500`}
+            ></div>
+          )}
+        </div>
         <h2 className="text-4xl font-bold font-inter">
           {chatData.chat_name || chatData.username}
         </h2>

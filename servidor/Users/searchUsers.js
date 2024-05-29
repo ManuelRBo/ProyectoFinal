@@ -14,7 +14,8 @@ export default async function searchUsers(req, res) {
                 id: user._id,
                 username: user.username,
                 img: user.img,
-                friend : user.friends.some(friend => friend.user.toString() === actualUser)
+                friend : user.friends.some(friend => friend.user.toString() === actualUser),
+                connected: user.connected
             }
         });
         const chatsResult = chats.map(chat => {

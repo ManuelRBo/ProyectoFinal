@@ -9,7 +9,7 @@ export default async function dataChat(req, res) {
         if(chat.members.includes(myUserId)) {
             const friend = chat.members.find(member => member.toString() !== myUserId.toString());
             const friendData = await User.findById(friend);
-            return res.json({username: friendData.username, img: friendData.img, user_id: friendData._id, type: chat.type})
+            return res.json({username: friendData.username, img: friendData.img, user_id: friendData._id, type: chat.type, connected: friendData.connected})
         } else {
             res.status(401).json({message: "Unauthorized"})
         }

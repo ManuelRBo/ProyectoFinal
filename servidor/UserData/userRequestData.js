@@ -12,7 +12,8 @@ export default async function userRequestData(req, res) {
         arrayFriendsRequests.push({
             username: userRequest.username,
             img: userRequest.img,
-            id: userRequest._id
+            id: userRequest._id,
+            connected: userRequest.connected
         });
     }
     res.json(arrayFriendsRequests);
