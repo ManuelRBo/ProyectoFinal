@@ -151,11 +151,11 @@ export default function ModalRegister() {
               })}
             >
               <option value="">Seleccione los años de experiencia</option>
-              <option value="none">Sin Experiencia</option>
+              <option value="ninguna">Sin Experiencia</option>
               <option value="junior">{"<"} 2 años - Junior</option>
               <option value="semi-senior">2 - 5 años - Semi Senior</option>
               <option value="senior">5 - 10 años - Senior</option>
-              <option value="expert">{">"} 10 años - Experto</option>
+              <option value="experto">{">"} 10 años - Experto</option>
             </select>
             {errors.experience && (
               <p className="text-red-500 text-xs font-inter">

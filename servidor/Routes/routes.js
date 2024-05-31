@@ -17,6 +17,7 @@ import followChat from "../Chats/followChat.js";
 import channelsData from "../Chats/channelsData.js";
 import update from "../UserData/update.js";
 import deleteAccount from "../Auth/deleteAccount.js";
+import UserDataModal from "../UserData/userDataModal.js";
 
 const routes = Router();
 
@@ -34,6 +35,7 @@ routes.get("/userData/userFriendsData", checkJWT, userFriendsData);
 routes.get("/chat/chatData/:id", checkJWT, dataChat);
 routes.get("/chat/messages/:id", checkJWT, getMessages);
 routes.get("/chat/channelsData", checkJWT, channelsData);
+routes.get("/userData/userDataModal/:id", checkJWT, UserDataModal);
 routes.patch("/userData/acceptFriend", checkJWT, acceptFriend);
 routes.patch("/userData/rejectFriend", checkJWT, rejectFriend);
 routes.delete("/delete", checkJWT, deleteAccount)

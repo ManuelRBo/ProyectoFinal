@@ -9,6 +9,7 @@ import axios from "axios";
 import useSocketStore from "../../stores/useSocket.js";
 import convertirHora from "../../utils/convertirHora.js";
 import { useUserDataStore } from "../../stores/userUserDataStore.js";
+import UserDataModal from "../HomeComponents/UserDataModal.jsx";
 
 export default function Chats() {
   const { id } = useParams();
@@ -19,6 +20,7 @@ export default function Chats() {
   const { socket } = useSocketStore();
   const { setUserData, userData } = useUserDataStore();
   const endMessage = useRef(null);
+  const [userDataModalOpen, setUserDataModalOpen] = useState(false);
 
   const scrollToBottom = () => {
     endMessage.current?.scrollIntoView({ behavior: "smooth" });
@@ -98,10 +100,16 @@ export default function Chats() {
     scrollToBottom();
   }, [messages]);
 
+  const handleUserDataModal = () => {
+    setUserDataModalOpen(true);
+  };
+
   return (
     <div className="flex flex-col gap-5 justify-between pb-4 h-full max-md:h-[calc(100%-80px)]">
       <div className="flex items-center max-md:justify-center gap-5 border-b-2 border-gray-200 pb-3 ml-5">
-        <div className="relative">
+        <div className="relative cursor-pointer"
+        onClick={() => chatData.type === "private" && handleUserDataModal()}
+        >
           {chatData.img && chatData.type === "private" ? (
             <img
               src={`/api/public/images/userData/${chatData.img}?t=${Date.now()}`}
@@ -146,6 +154,9 @@ export default function Chats() {
                         message={message.message}
                         time={convertirHora(message.time)}
                         sender={message.sender_user}
+                        sender_id={message.sender_id}
+                        userDataModalOpen={userDataModalOpen}
+                        setUserDataModalOpen={setUserDataModalOpen}
                       />
                     </div>
                   </div>
@@ -203,6 +214,7 @@ export default function Chats() {
           </button>
         </form>
       </div>
+      {userDataModalOpen && <UserDataModal userDataModalOpen={userDataModalOpen} id={chatData.user_id} setUserDataModalOpen={setUserDataModalOpen} />}
     </div>
   );
 }

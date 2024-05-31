@@ -89,7 +89,7 @@ export default function Contact({ img, iconName, iconNameChannel, username, frie
       onMouseEnter={handleHover}
       onMouseLeave={handleLeave}
     >
-      <div className="relative cursor-pointer" onClick={handleUserDataModal}>
+      <div className="relative cursor-pointer" onClick={() => (iconName || img) && handleUserDataModal()}>
       {iconNameChannel && <Icon icon={iconNameChannel} width="50px" />}
       {iconName && <UserCircleIcon width="50px" />}
         {img &&
