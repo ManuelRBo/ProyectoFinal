@@ -2,6 +2,8 @@ import User from "../models/User.js";
 import Chat from "../models/Chats.js";
 import Message from "../models/Message.js";
 import fs from "fs";
+import io from "../server.js";
+import { userSockets } from "../Sockets/mainSocket.js";
 
 export default async function deleteAccount(req, res) {
   const { id } = req.user;
@@ -30,6 +32,19 @@ export default async function deleteAccount(req, res) {
 
     // Elimina al usuario
     const user = await User.findById(id);
+
+    const friends = user.friends;
+
+    for (let friend of friends) {
+      const friendUser = await User.findById(friend.user);
+      io.to(userSockets.get(friend.user.toString())).emit("friend-delete", { id: id });
+      friendUser.friends = friendUser.friends.filter(
+        friend => friend.user.toString() !== id
+      );
+      await friendUser.save();
+    }
+
+
     if (!user) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }

@@ -22,12 +22,22 @@ export default function Friends({friendsOpen}) {
     };
   
     socket.on("friendRequestAccepted", handleFriendRequestAccepted);
+
+    socket.on("friendRequest", () => {
+      setUserRequestData();
+    })
+
     socket.on("connected", () =>{
       setUserFriendsData();
       setUserRequestData();
     })
 
     socket.on("friend-logout", () =>{
+      setUserFriendsData();
+      setUserRequestData();
+    })
+
+    socket.on("friend-delete", () =>{
       setUserFriendsData();
       setUserRequestData();
     })

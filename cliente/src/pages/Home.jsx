@@ -106,7 +106,7 @@ export default function Home() {
       });
 
       return () => {
-        socket.off("new-message");
+        // socket.off("new-message");
         socket.off("connected");
         socket.off("friendRequestAccepted");
         socket.off("friendRequest");
@@ -521,34 +521,6 @@ export default function Home() {
                     }
                   />
                 </div>
-
-                {/* <div className="flex flex-col gap-3 items-center w-full">
-                  <label
-                    className="font-inter text-base font-bold"
-                    htmlFor="email"
-                  >
-                    Correo Electrónico
-                  </label>
-                  <input
-                    className="border-2 border-[#004280] py-1 px-3 rounded-xl w-[80%]"
-                    type="email"
-                    id="email"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-3 items-center w-full">
-                  <label
-                    className="font-inter text-base font-bold"
-                    htmlFor="password"
-                  >
-                    Contraseña
-                  </label>
-                  <input
-                    className="border-2 border-[#004280] py-1 px-3 rounded-xl w-[80%]"
-                    type="password"
-                    id="password"
-                  />
-                </div> */}
 
                 <button
                   className="w-[60%] font-inter text-base font-bold bg-[#004280] text-white py-3 px-3 rounded-xl hover:bg-white hover:text-[#004280] transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"

@@ -91,7 +91,7 @@ export default function Chats() {
         setChatData(res.data);
       })
     });
-    // return () => socket.off("new-message");
+    return () => socket.off("new-message");
   }, [socket, id, setUserData]);
 
   useEffect(() => {

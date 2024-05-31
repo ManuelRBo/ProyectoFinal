@@ -6,12 +6,14 @@ import {useUserDataStore} from "../../stores/userUserDataStore";
 import { useNavigate } from "react-router-dom";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import {Icon} from "@iconify-icon/react";
+import UserDataModal from "./UserDataModal";
 
 
-export default function Contact({ img, iconName, iconNameChannel, username, friend, id, userInChat, connected }) {
+export default function Contact({ img, iconName, iconNameChannel, username, friend, id, userInChat, connected, setQuery }) {
   const [hover, setHover] = useState(false);
   const { socket } = useSocketStore();
   const { setUserRequestData, setUserFriendsData, setUserData } = useUserDataStore();
+  const [ userDataModalOpen, setUserDataModalOpen ] = useState(false);
 
 
   const handleHover = () => {
@@ -23,7 +25,7 @@ export default function Contact({ img, iconName, iconNameChannel, username, frie
   };
 
   const handleAddFriend = () => {
-    console.log("Añadir amigo");
+    setQuery("");
     socket.emit("addFriend", { id }, (res) => {
       if (res.error) return toast.error(res.error);
       toast.success("Solicitud de amistad enviada");
@@ -77,13 +79,17 @@ export default function Contact({ img, iconName, iconNameChannel, username, frie
     navigate(`/home/chat/${id}`);
   }
 
+  const handleUserDataModal = () => {
+    setUserDataModalOpen(true);
+  }
+
   return (
     <div
       className="flex items-center gap-1"
       onMouseEnter={handleHover}
       onMouseLeave={handleLeave}
     >
-      <div className="relative">
+      <div className="relative cursor-pointer" onClick={handleUserDataModal}>
       {iconNameChannel && <Icon icon={iconNameChannel} width="50px" />}
       {iconName && <UserCircleIcon width="50px" />}
         {img &&
@@ -127,6 +133,8 @@ export default function Contact({ img, iconName, iconNameChannel, username, frie
       ) 
       )
       )}
+
+      {userDataModalOpen && <UserDataModal userDataModalOpen={userDataModalOpen} id={id} setUserDataModalOpen={setUserDataModalOpen} />}
     </div>
   );
 }

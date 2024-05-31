@@ -57,8 +57,8 @@ export default async function register(req, res) {
       email: email,
       birthdate: birthdate,
       exp: experience,
+      connected: true,
     });
-    console.log(user);
     try {
       await user.save();
       const payload = {

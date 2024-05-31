@@ -69,6 +69,12 @@ export default function PrimaryPage() {
           });
         });
       });
+
+      socket.on("friend-delete", () => {
+        axios.get("/api/userData/userFriendsData").then((res) => {
+          setFriendsData(res.data);
+        });
+      });
     // return () => socket.off("friendRequestAccepted");
   }, [setFriendsData, socket ,query]);
 
@@ -100,7 +106,7 @@ export default function PrimaryPage() {
               <h3 className="text-2xl font-bold font-inter mb-2">Usuarios</h3>
               <div className="grid grid-cols-1 xl:grid-cols-3 2xl:grid-cols-4 gap-y-5">
               {users.length > 0 ? users.map(user => (
-                <Contact key={user.username} username={user.username} iconName={user.img ? undefined : UserCircleIcon} img={user.img ? user.img : undefined} friend={user.friend} connected={user.connected} id={user.id}/>
+                <Contact key={user.username} username={user.username} iconName={user.img ? undefined : UserCircleIcon} img={user.img ? user.img : undefined} friend={user.friend} connected={user.connected} id={user.id} setQuery={setQuery}/>
               )) : <p>No hay resultados</p>}
               </div>
             </div>
