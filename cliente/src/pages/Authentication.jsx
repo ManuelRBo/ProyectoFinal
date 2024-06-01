@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import BotonAutenticar from "../components/BotonAutenticar";
 import Modal from "../components/Modal";
-import { set } from "react-hook-form";
+import { Application } from '@splinetool/runtime';
 
 export default function Authentication() {
   const [modalOpen, setModalOpen] = useState({
@@ -19,14 +19,24 @@ export default function Authentication() {
     setModalOpen({ open: false, auth: "" });
   }
 
+    const canvasRef = useRef(null);
+  
+    useEffect(() => {
+      const canvas = canvasRef.current;
+      const app = new Application(canvas);
+      app.load('https://prod.spline.design/MsI3dlZJaF-u2uq2/scene.splinecode');
+  
+      // Clean up the application on component unmount
+      return () => {
+        app.dispose();
+      };
+    }, []);
+
+
   return (
     <main className="flex flex-col-reverse gap-10 lg:flex-row h-svh lg:gap-0 w-full">
-      <div className="w-full lg:max-w-3xl">
-        <img
-          src="/src/assets/images/DevSocialIndex.png"
-          alt=""
-          className="h-72 lg:h-lvh w-full object-cover"
-        />
+      <div className="w-full lg:max-w-3xl h-full">
+        <canvas ref={canvasRef} className="w-full h-full" />
       </div>
       <div className="grid place-items-center lg:ml-10 lg:mr-10 xl:ml-0 xl:mr-0 mx-auto flex-grow">
         <div className="flex flex-col gap-10 lg:gap-20 mx-auto max-sm:w-10/12">
