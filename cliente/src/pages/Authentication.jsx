@@ -20,12 +20,12 @@ export default function Authentication() {
   }
 
   return (
-    <main className="flex flex-col-reverse max-sm:mt-10 gap-10 lg:flex-row min-h-screen lg:gap-0 w-full">
+    <main className="flex flex-col-reverse gap-10 lg:flex-row h-svh lg:gap-0 w-full">
       <div className="w-full lg:max-w-3xl">
         <img
           src="/src/assets/images/DevSocialIndex.png"
           alt=""
-          className="h-96 lg:h-lvh w-full object-cover"
+          className="h-72 lg:h-lvh w-full object-cover"
         />
       </div>
       <div className="grid place-items-center lg:ml-10 lg:mr-10 xl:ml-0 xl:mr-0 mx-auto flex-grow">
