@@ -105,7 +105,7 @@ export default function Chats() {
   };
 
   return (
-    <div className="flex flex-col gap-5 justify-between pb-4 h-full max-md:h-[calc(100%-80px)]">
+    <div className="flex flex-col gap-5 justify-between pb-4 h-full max-md:max-h-svh">
       <div className="flex items-center max-md:justify-center gap-5 border-b-2 border-gray-200 pb-3 ml-5">
         <div className="relative cursor-pointer"
         onClick={() => chatData.type === "private" && handleUserDataModal()}

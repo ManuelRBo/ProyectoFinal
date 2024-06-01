@@ -195,7 +195,7 @@ export default function Home() {
   }
 
   return (
-    <div className="h-lvh flex justify-evenly max-w-[97%] mx-auto">
+    <div className="h-svh flex justify-evenly max-w-[97%] mx-auto">
       <aside className={`h-full w-1/6 flex flex-col items-start`}>
         <div
           className={`h-full flex flex-col gap-5 items-start ${
@@ -324,7 +324,7 @@ export default function Home() {
         </div>
       </aside>
 
-      <main className="w-4/5 mt-6 h-[calc(100vh-40px)]">
+      <main className="w-4/5 mt-6 h-[calc(100%-40px)] overflow-hidden">
         <Routes>
           <Route path="/" element={<PrimaryPage />} />
           <Route path="/chat/:id" element={<Chats />} />
