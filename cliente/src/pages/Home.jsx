@@ -473,10 +473,9 @@ export default function Home() {
                     />
                   ) : userData.user.img ? (
                     <img
-                      className="rounded-full"
+                      className="rounded-full w-24 h-24 object-cover"
                       src={"/api/public/images/userData/" + userData.user.img + "?t=" + Date.now()}
                       alt=""
-                      width="100px"
                     />
                   ) : (
                     <UserCircleIcon width="100px" />
