@@ -215,7 +215,7 @@ export default function Chats() {
           </button>
         </form>
       </div>
-      {userDataModalOpen.open && <UserDataModal userDataModalOpen={userDataModalOpen.open} id={userDataModalOpen.id} setUserDataModalOpen={setUserDataModalOpen} />}
+      {userDataModalOpen.open && <UserDataModal userDataModalOpen={userDataModalOpen} id={userDataModalOpen.id} setUserDataModalOpen={setUserDataModalOpen} />}
     </div>
   );
 }

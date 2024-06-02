@@ -7,7 +7,7 @@ export default function UserDataModal({ userDataModalOpen, id, setUserDataModalO
   const [userData, setUserData] = useState({});
 
   useEffect(() => {
-    if (userDataModalOpen) {
+    if (userDataModalOpen.open) {
       axios
         .get(`/api/userData/userDataModal/${id}`)
         .then((res) => {
@@ -25,7 +25,7 @@ export default function UserDataModal({ userDataModalOpen, id, setUserDataModalO
 
   return (
     <Transition
-      show={userDataModalOpen}
+      show={userDataModalOpen.open}
       enter="transition-opacity duration-200 ease-in-out"
       enterFrom="opacity-0"
       enterTo="opacity-100"

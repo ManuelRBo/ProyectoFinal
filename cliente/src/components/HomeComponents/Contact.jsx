@@ -13,7 +13,7 @@ export default function Contact({ img, iconName, iconNameChannel, username, frie
   const [hover, setHover] = useState(false);
   const { socket } = useSocketStore();
   const { setUserRequestData, setUserFriendsData, setUserData } = useUserDataStore();
-  const [ userDataModalOpen, setUserDataModalOpen ] = useState(false);
+  const [ userDataModalOpen, setUserDataModalOpen ] = useState({ open: false, id: "" });
 
 
   const handleHover = () => {
@@ -79,8 +79,8 @@ export default function Contact({ img, iconName, iconNameChannel, username, frie
     navigate(`/home/chat/${id}`);
   }
 
-  const handleUserDataModal = () => {
-    setUserDataModalOpen(true);
+  const handleUserDataModal = (id) => {
+    setUserDataModalOpen({ open: true, id: id });
   }
 
   return (
@@ -89,7 +89,7 @@ export default function Contact({ img, iconName, iconNameChannel, username, frie
       onMouseEnter={handleHover}
       onMouseLeave={handleLeave}
     >
-      <div className="relative cursor-pointer" onClick={() => (iconName || img) && handleUserDataModal()}>
+      <div className="relative cursor-pointer" onClick={() => (iconName || img) && handleUserDataModal(id)}>
       {iconNameChannel && <Icon icon={iconNameChannel} width="50px" />}
       {iconName && <UserCircleIcon width="50px" />}
         {img &&
@@ -134,7 +134,7 @@ export default function Contact({ img, iconName, iconNameChannel, username, frie
       )
       )}
 
-      {userDataModalOpen && <UserDataModal userDataModalOpen={userDataModalOpen} id={id} setUserDataModalOpen={setUserDataModalOpen} />}
+      {userDataModalOpen && <UserDataModal userDataModalOpen={userDataModalOpen} id={userDataModalOpen.id} setUserDataModalOpen={setUserDataModalOpen} />}
     </div>
   );
 }
