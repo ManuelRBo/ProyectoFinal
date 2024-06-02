@@ -20,7 +20,7 @@ export default function Chats() {
   const { socket } = useSocketStore();
   const { setUserData, userData } = useUserDataStore();
   const endMessage = useRef(null);
-  const [userDataModalOpen, setUserDataModalOpen] = useState(false);
+  const [userDataModalOpen, setUserDataModalOpen] = useState({ open: false, id: "" });
 
   const scrollToBottom = () => {
     endMessage.current?.scrollIntoView({ behavior: "smooth" });
@@ -65,7 +65,6 @@ export default function Chats() {
   useEffect(() => {
     socket.on("new-message", (data) => {
       if (data.chat_id !== id) return;
-      console.log(data);
       setUserData();
       setMessages((prevMessage) => [
         ...prevMessage,
@@ -80,18 +79,18 @@ export default function Chats() {
 
     socket.on("connected", () => {
       axios
-      .get("/api/chat/chatData/" + id)
-      .then((res) => {
-        setChatData(res.data);
-      })
+        .get("/api/chat/chatData/" + id)
+        .then((res) => {
+          setChatData(res.data);
+        });
     });
 
     socket.on("friend-logout", () => {
       axios
-      .get("/api/chat/chatData/" + id)
-      .then((res) => {
-        setChatData(res.data);
-      })
+        .get("/api/chat/chatData/" + id)
+        .then((res) => {
+          setChatData(res.data);
+        });
     });
     return () => socket.off("new-message");
   }, [socket, id, setUserData]);
@@ -100,15 +99,16 @@ export default function Chats() {
     scrollToBottom();
   }, [messages]);
 
-  const handleUserDataModal = () => {
-    setUserDataModalOpen(true);
+  const handleUserDataModal = (sender_id) => {
+    setUserDataModalOpen({ open: true, id: sender_id });
   };
 
   return (
     <div className="flex flex-col gap-5 justify-between pb-4 h-full max-md:max-h-svh">
       <div className="flex items-center max-md:justify-center gap-5 border-b-2 border-gray-200 pb-3 ml-5">
-        <div className="relative cursor-pointer"
-        onClick={() => chatData.type === "private" && handleUserDataModal()}
+        <div
+          className="relative cursor-pointer"
+          onClick={() => chatData.type === "private" && handleUserDataModal(chatData.user_id)}
         >
           {chatData.img && chatData.type === "private" ? (
             <img
@@ -157,6 +157,7 @@ export default function Chats() {
                         sender_id={message.sender_id}
                         userDataModalOpen={userDataModalOpen}
                         setUserDataModalOpen={setUserDataModalOpen}
+                        handleUserDataModal={handleUserDataModal}
                       />
                     </div>
                   </div>
@@ -214,7 +215,7 @@ export default function Chats() {
           </button>
         </form>
       </div>
-      {userDataModalOpen && <UserDataModal userDataModalOpen={userDataModalOpen} id={chatData.user_id} setUserDataModalOpen={setUserDataModalOpen} />}
+      {userDataModalOpen.open && <UserDataModal userDataModalOpen={userDataModalOpen.open} id={userDataModalOpen.id} setUserDataModalOpen={setUserDataModalOpen} />}
     </div>
   );
 }
