@@ -10,6 +10,7 @@ import axios from "axios";
 
 const Home = lazy(() => import("./pages/Home"));
 const Authentication = lazy(() => import("./pages/Authentication"));
+const NotFound = lazy(() => import("./pages/404"));
 
 function App() {
   const { isAuth, login } = useAuthStore();
@@ -63,7 +64,7 @@ function App() {
             path="/home/*"
             element={isAuth ? <Home /> : <Navigate to="/" />}
           />
-          <Route path="*" element={<h1>Page Not Found</h1>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </Router>
