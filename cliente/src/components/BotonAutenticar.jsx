@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 export default function BotonAutenticar({ texto, onClick, className }) {
   return (
     <button
@@ -7,4 +9,10 @@ export default function BotonAutenticar({ texto, onClick, className }) {
       {texto}
     </button>
   );
+}
+
+BotonAutenticar.propTypes = {
+  texto: PropTypes.string,
+  onClick: PropTypes.func,
+  className: PropTypes.string
 }

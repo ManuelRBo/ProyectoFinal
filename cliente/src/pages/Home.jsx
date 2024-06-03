@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
@@ -86,7 +86,7 @@ export default function Home() {
         toast.info("Tienes una nueva solicitud de amistad");
       });
 
-      socket.on("friendRequestAccepted", (res) => {
+      socket.on("friendRequestAccepted", () => {
         setUserData();
         toast.success("Solicitud de amistad aceptada");
       });
@@ -186,7 +186,7 @@ export default function Home() {
         toast.success("Cuenta eliminada correctamente");
         logout();
       })
-      .catch((err) => {
+      .catch(() => {
         toast.error("Error al eliminar cuenta");
       });
   };

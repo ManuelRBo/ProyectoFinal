@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import { Icon as IconifyIcon } from '@iconify-icon/react';
+import PropTypes from 'prop-types';
 
 export default function MenuOption({Icon, text, onClick, to, imgSrc, iconLogo}) {
   return (
@@ -10,4 +11,14 @@ export default function MenuOption({Icon, text, onClick, to, imgSrc, iconLogo}) 
         {text && <p className="text-base font-inter font-light">{text}</p>}
     </Link>
   )
+}
+
+
+MenuOption.propTypes = {
+  Icon: PropTypes.elementType,
+  text: PropTypes.string,
+  onClick: PropTypes.func,
+  to: PropTypes.string,
+  imgSrc: PropTypes.string,
+  iconLogo: PropTypes.string
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import useSocketStore from "../../stores/useSocket";
 import { toast } from "react-toastify";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import {Icon} from "@iconify-icon/react";
 import UserDataModal from "./UserDataModal";
+import PropTypes from 'prop-types';
 
 
 export default function Contact({ img, iconName, iconNameChannel, username, friend, id, userInChat, connected, setQuery }) {
@@ -137,4 +138,17 @@ export default function Contact({ img, iconName, iconNameChannel, username, frie
       {userDataModalOpen && <UserDataModal userDataModalOpen={userDataModalOpen} id={userDataModalOpen.id} setUserDataModalOpen={setUserDataModalOpen} />}
     </div>
   );
+}
+
+
+Contact.propTypes = {
+  img: PropTypes.string,
+  iconName: PropTypes.elementType,
+  iconNameChannel: PropTypes.string,
+  username: PropTypes.string,
+  friend: PropTypes.bool,
+  id: PropTypes.string,
+  userInChat: PropTypes.bool,
+  connected: PropTypes.bool,
+  setQuery: PropTypes.func
 }

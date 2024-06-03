@@ -1,4 +1,5 @@
 import { Icon as IconLogo } from '@iconify-icon/react';
+import PropTypes from 'prop-types';
 
 export default function Messages({ imgSrc, Icon, name, message, newMessage, iconLogo}) {
     return (
@@ -18,4 +19,13 @@ export default function Messages({ imgSrc, Icon, name, message, newMessage, icon
             </div>
             </div>
     );
+}
+
+Messages.propTypes = {
+    imgSrc: PropTypes.string,
+    Icon: PropTypes.elementType,
+    name: PropTypes.string,
+    message: PropTypes.string,
+    newMessage: PropTypes.bool,
+    iconLogo: PropTypes.string
 }

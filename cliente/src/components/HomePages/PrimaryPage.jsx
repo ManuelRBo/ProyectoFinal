@@ -29,7 +29,7 @@ export default function PrimaryPage() {
           setChats(res.data.chats);
           setLoading(false);
         })
-        .catch(err => {
+        .catch(() => {
             logout();
         });
       }, 300);

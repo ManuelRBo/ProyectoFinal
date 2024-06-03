@@ -2,6 +2,7 @@ import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import ModalLogIn from "./ModalsAuth/ModalLogIn";
 import ModalRegister from "./ModalsAuth/ModalRegister";
+import PropTypes from 'prop-types';
 
 export default function Modal({ auth, onClose }) {
   let [isOpen, setIsOpen] = useState(true);
@@ -29,7 +30,12 @@ export default function Modal({ auth, onClose }) {
         </Dialog.Panel>
       </Dialog>
     </Transition>
-
-    
   );
 }
+
+Modal.propTypes = {
+  auth: PropTypes.string,
+  onClose: PropTypes.func
+}
+
+

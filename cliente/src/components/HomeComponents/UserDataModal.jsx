@@ -2,6 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import axios from "axios";
 import { Fragment, useEffect, useState } from "react";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
+import PropTypes from 'prop-types';
 
 export default function UserDataModal({ userDataModalOpen, id, setUserDataModalOpen }) {
   const [userData, setUserData] = useState({});
@@ -84,4 +85,11 @@ export default function UserDataModal({ userDataModalOpen, id, setUserDataModalO
       </Dialog>
     </Transition>
   );
+}
+
+
+UserDataModal.propTypes = {
+  userDataModalOpen: PropTypes.object,
+  id: PropTypes.string,
+  setUserDataModalOpen: PropTypes.func
 }

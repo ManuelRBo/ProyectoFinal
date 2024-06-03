@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 export default function InputForm({ label, type, placeholder, register, error }) {
   
     return (
@@ -17,3 +19,11 @@ export default function InputForm({ label, type, placeholder, register, error })
     );
   }
   
+
+InputForm.propTypes = {
+  label: PropTypes.string,
+  type: PropTypes.string,
+  placeholder: PropTypes.string,
+  register: PropTypes.object,
+  error: PropTypes.object
+}

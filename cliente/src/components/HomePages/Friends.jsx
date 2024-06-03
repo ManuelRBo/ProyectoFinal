@@ -4,10 +4,11 @@ import { useUserDataStore } from "../../stores/userUserDataStore";
 import useSocketStore from "../../stores/useSocket";
 import { toast } from "react-toastify";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
+import PropTypes from 'prop-types';
 
 export default function Friends({friendsOpen}) {
 
-  const {userRequestData, setUserRequestData, userLoading, userFriendsData, setUserFriendsData, setUserData} = useUserDataStore();
+  const {userRequestData, setUserRequestData, userLoading, userFriendsData, setUserFriendsData} = useUserDataStore();
   const {socket} = useSocketStore();
 
   useEffect(() => {
@@ -88,4 +89,8 @@ export default function Friends({friendsOpen}) {
       </div>
     </>
   )
+}
+
+Friends.propTypes = {
+  friendsOpen: PropTypes.bool
 }

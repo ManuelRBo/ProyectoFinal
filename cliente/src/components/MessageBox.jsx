@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 
 export default function MessageBox({ type, message, time, sender, sender_id, handleUserDataModal }) {
   return (
@@ -14,4 +15,13 @@ export default function MessageBox({ type, message, time, sender, sender_id, han
       </div>
     </div>
   );
+}
+
+MessageBox.propTypes = {
+  type: PropTypes.string,
+  message: PropTypes.string,
+  time: PropTypes.string,
+  sender: PropTypes.string,
+  sender_id: PropTypes.string,
+  handleUserDataModal: PropTypes.func
 }
