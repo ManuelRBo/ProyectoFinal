@@ -21,6 +21,7 @@ export const loginValidator = [
 
 export default async function login(req, res) {
     const { user_email, password } = req.body;
+    console.log(user_email);
     try{
         const user = await User.findOne( {$or: [{email: user_email}, {username: user_email}]})
         if(!user){

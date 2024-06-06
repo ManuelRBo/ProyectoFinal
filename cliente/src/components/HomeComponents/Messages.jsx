@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 export default function Messages({ imgSrc, Icon, name, message, newMessage, iconLogo}) {
     return (
-            <div className={`flex max-md:justify-center lg:gap-2 border-b-2 pb-1 p-4 border-gray-300 shadow-lg  ${newMessage && "shadow-[0_0px_5px_4px] rounded-lg shadow-blue-300"}`}>
+            <div className={`flex max-md:justify-center lg:gap-2 border-b-2 pb-1 p-4 max-sm:px-1 border-gray-300 shadow-lg  ${newMessage && "shadow-[0_0px_5px_4px] rounded-lg shadow-blue-300"}`}>
             <div className="w-max">
             {imgSrc ? (
-                    <img src={`/api/public/images/userData/${imgSrc}?t=${Date.now()}`} alt="User" width="40px" className="rounded-full w-10 h-10 object-cover" />
+                    <img src={`/api/public/images/userData/${imgSrc}?t=${Date.now()}`} alt="User" width="40px" className="rounded-full w-10 h-10 object-cover max-md:w-10 max-md:h-10" />
                 ) : iconLogo ? (
                     <IconLogo icon={iconLogo} width="30px" />
                 ) : (

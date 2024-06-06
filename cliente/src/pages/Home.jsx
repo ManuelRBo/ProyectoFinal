@@ -93,8 +93,7 @@ export default function Home() {
 
       socket.on("new-message", (res) => {
         setUserData();
-
-        if (location.pathname != "/home/chat/" + res.chat_id) {
+        if (location.pathname.split("/")[3] != res.chat_id) {
           toast.info("Tienes un nuevo mensaje");
           setNewMessage((prev) => [...prev, { chat_id: res.chat_id }]);
         }
@@ -106,7 +105,6 @@ export default function Home() {
       });
 
       return () => {
-        // socket.off("new-message");
         socket.off("connected");
         socket.off("friendRequestAccepted");
         socket.off("friendRequest");

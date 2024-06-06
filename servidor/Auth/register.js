@@ -27,6 +27,7 @@ export const registerValidator = [
     .withMessage(
       "La contraseña debe tener al menos 6 caracteres y contener letras y números"
     ),
+  body("username").trim().escape().toLowerCase(),
   body("name").trim().escape().toLowerCase(),
   body("lastname").trim().escape().toLowerCase(),
   body("birthdate").trim().escape(),

@@ -59,7 +59,7 @@ export default function UserDataModal({ userDataModalOpen, id, setUserDataModalO
                   <img
                     src={`/api/public/images/userData/${userData.img}?t=${Date.now()}`}
                     alt="icon"
-                    className="rounded-full w-10 h-10 object-cover md:w-14 md:h-14"
+                    className="rounded-full w-24 h-24 object-cover md:w-32 md:h-32"
                   />
                 ) : (
                   <UserCircleIcon width="70px" />
