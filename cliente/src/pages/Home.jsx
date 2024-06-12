@@ -104,7 +104,12 @@ export default function Home() {
         toast.info(res.username + " se ha conectado");
       });
 
+      socket.on("friend-delete", () => {
+        setUserData();
+      });
+
       return () => {
+        socket.off("new-message");
         socket.off("connected");
         socket.off("friendRequestAccepted");
         socket.off("friendRequest");

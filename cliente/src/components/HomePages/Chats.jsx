@@ -63,7 +63,7 @@ export default function Chats() {
   };
 
   useEffect(() => {
-    socket.on("new-message", (data) => {
+    const handleMessage = (data) => {
       if (data.chat_id !== id) return;
       setUserData();
       setMessages((prevMessage) => [
@@ -75,7 +75,8 @@ export default function Chats() {
           time: data.time,
         },
       ]);
-    });
+    };
+    socket.on("new-message", handleMessage);
 
     socket.on("connected", () => {
       axios
@@ -92,8 +93,13 @@ export default function Chats() {
           setChatData(res.data);
         });
     });
+
+    socket.on("friend-delete", () => {
+      window.location.href = "/home";
+    });
+
     return () => {
-      socket.off("new-message");
+      socket.off("new-message", handleMessage);
     };
   }, [socket, id, setUserData]);
 

@@ -60,7 +60,7 @@ export default function Friends({friendsOpen}) {
         <h2 className="text-lg md:text-3xl max-md:text-center font-inter font-bold mb-4 md:mb-8">Peticiones de Amistad</h2>
         {!userLoading && userRequestData.length === 0 ? <p className="text-sm md:text-base max-md:text-center font-inter">No tienes peticiones de amistad</p>:
           <>
-          <div className="flex flex-wrap max-lg:justify-center justify-start gap-8 md:gap-14 max-w-6xl mx-auto">
+          <div className="flex flex-wrap max-md:justify-center justify-start gap-8 md:gap-14 max-w-6xl mx-auto">
           {!userLoading ? userRequestData.map((user, index) => (
             <Contact key={index} username={user.username} iconName={user.img ? undefined : UserCircleIcon} img={user.img ? user.img : undefined} friend={"pendiente"} connected={user.connected} id={user.id}/>
           )) : <h2 className="text-lg md:text-3xl max-md:text-center font-inter font-bold mb-4 md:mb-8">Cargando...</h2>}
@@ -76,7 +76,7 @@ export default function Friends({friendsOpen}) {
             <input type="text" placeholder="Buscar amigos" className="w-full md:w-1/2 p-2 border border-gray-300 rounded-md" />
             <button className="bg-blue-500 text-white p-2 rounded-md">Buscar</button>
         </form> */}
-        <div className="flex flex-wrap max-lg:justify-center justify-start gap-8 md:gap-14">
+        <div className="flex flex-wrap max-md:justify-center justify-start gap-8 md:gap-14">
         {!userLoading && userFriendsData.length === 0 ? <p className="text-sm md:text-base max-md:text-center font-inter">No tienes amigos</p>:
 
           <div className="flex flex-wrap max-lg:justify-center justify-start gap-8 md:gap-14 ">

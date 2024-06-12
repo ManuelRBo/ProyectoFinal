@@ -142,7 +142,7 @@ export default function PrimaryPage() {
 
       <div className="max-w-7xl">
         <h2 className="text-lg md:text-3xl max-md:text-center font-inter font-black mb-4 md:mb-8">Últimos Amigos Agregados</h2>
-        <div className="flex flex-wrap justify-center md:justify-start lg:justify-between gap-4 max-w-6xl mx-auto">
+        <div className="flex flex-wrap justify-center md:justify-start gap-4 max-w-6xl mx-auto">
           {friendsData.length > 0 ? friendsData.slice(0,5).map(friend => (
             <Contact key={friend.username} username={friend.username} iconName={friend.img ? undefined : UserCircleIcon} img={friend.img ? friend.img : undefined} friend={true} connected={friend.connected} id={friend.id}/>
           )) : <p>No existen ultimos amgios agregados</p>}
@@ -151,7 +151,7 @@ export default function PrimaryPage() {
 
       <div className="mt-14 max-w-7xl">
         <h2 className="text-lg md:text-3xl max-md:text-center font-inter font-black mb-4 md:mb-8">Últimos Canales Seguidos</h2>
-        <div className="flex flex-wrap justify-center md:justify-start lg:justify-between gap-4 max-w-6xl mx-auto">
+        <div className="flex flex-wrap justify-center md:justify-start gap-4 max-w-6xl mx-auto">
           {channelsData.length > 0 ? channelsData.slice(0,5).map(channel => (
             <Contact key={channel.chat_name} username={channel.chat_name} iconNameChannel={channel.img} userInChat={true} id={channel._id}/>
           )) : <p>No existen ultimos canales seguidos</p>}
