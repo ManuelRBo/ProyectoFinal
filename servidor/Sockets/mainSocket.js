@@ -21,7 +21,6 @@ export default function mainSocket(socket) {
     });
 
     socket.on('addFriend', async ({ id }, callback)=>{
-        console.log(id);
         try{
             const response = await addFriend(userSockets, user, id);
             callback(response);

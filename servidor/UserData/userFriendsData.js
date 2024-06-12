@@ -16,6 +16,5 @@ export default async function userFriendsData(req, res) {
             connected: userRequest.connected
         });
     }
-    console.log(arrayFriends);
     res.json(arrayFriends);
 }

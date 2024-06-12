@@ -19,7 +19,6 @@ export default async function searchUsers(req, res) {
                 connected: user.connected
             }
         });
-        console.log(usersResult);
         const chatsResult = chats.map(chat => {
             return {
                 id: chat._id,
