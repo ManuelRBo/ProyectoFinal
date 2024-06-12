@@ -365,11 +365,11 @@ export default function Home() {
             menuExpanded ? "max-w-56 w-4/5" : "w-12"
           }`}
         >
-          <div className="flex items-center gap-3 pt-7 p-2">
-            <ChatBubbleLeftRightIcon width="30px" />
+          <div className="w-full flex items-center justify-center gap-1 pt-7">
+            <ChatBubbleLeftRightIcon width="30px" className="flex-shrink-0" />
             {menuExpanded && (
               <div className="flex flex-col">
-                <h3 className="font-inter font-bold text-xl">Mensajes</h3>
+                <h3 className="font-inter font-bold text-lg">Mensajes</h3>
                 <p>{userData.chats_private_data <= 0 && "No hay chats"}</p>
               </div>
             )}
@@ -418,7 +418,7 @@ export default function Home() {
                   />
                 </div>
               ))
-            : menuExpanded && <p className="text-center w-3/4">No hay chats</p>}
+            : menuExpanded && <p className="text-center w-full">No hay chats</p>}
 
           {/* <div>
             <Messages

@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 const useSocketStore = create((set) => ({
   socket: null,
   connectSocket: () => {
-    const socket = io('https://devsocial.es', {
+    const socket = io('http://localhost:3000/', {
       withCredentials: true,
     });
     socket.on('connect', () => {
