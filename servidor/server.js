@@ -39,7 +39,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/public',express.static('public'));
+app.use('/public', express.static('public'));
 
 // Middleware para manejar las rutas definidas en el archivo 'routes.js'
 app.use(routes);

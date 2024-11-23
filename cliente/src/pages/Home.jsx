@@ -499,7 +499,7 @@ export default function Home() {
                     <img
                       className="rounded-full w-24 h-24 object-cover"
                       src={
-                        "/api/public/images/userData/" +
+                        "/public/images/userData/" +
                         userData.user.img +
                         "?t=" +
                         Date.now()

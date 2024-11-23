@@ -120,7 +120,7 @@ export default function Chats() {
         >
           {chatData.img && chatData.type === "private" ? (
             <img
-              src={`/api/public/images/userData/${chatData.img}?t=${Date.now()}`}
+              src={`/public/images/userData/${chatData.img}?t=${Date.now()}`}
               alt="Chat"
               className="w-14 rounded-full h-14 object-cover"
             />

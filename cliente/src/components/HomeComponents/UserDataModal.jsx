@@ -57,7 +57,7 @@ export default function UserDataModal({ userDataModalOpen, id, setUserDataModalO
               <div className="flex justify-center">
                 {userData.img ? (
                   <img
-                    src={`/api/public/images/userData/${userData.img}?t=${Date.now()}`}
+                    src={`/public/images/userData/${userData.img}?t=${Date.now()}`}
                     alt="icon"
                     className="rounded-full w-24 h-24 object-cover md:w-32 md:h-32"
                   />
